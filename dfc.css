@@ -170,3 +170,7 @@ html.dfc-trava, html.dfc-trava body { overflow: hidden; }
 .dfc-pix-ok:empty { min-height: 0; }
 .tms-pr .dfc-pix { margin: 4px 0 16px; width: 100%; }
 .dfc-pr-nota { margin-top: 12px !important; font-size: 13px; color: rgba(255,255,255,.6); text-align: center; }
+
+/* vídeo do Drive: o player do Google num quadro vertical (as lutas são 1080x1920) */
+.dfc-video--drive { width: min(100%, 460px); margin: 0 auto; aspect-ratio: 9 / 16; }
+.dfc-video--drive iframe { display: block; width: 100%; height: 100%; border: 0; background: #000; }

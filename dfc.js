@@ -83,7 +83,7 @@
         return sub.decrypt({ name: 'AES-GCM', iv: b64(c.iv) }, k, b64(c.ct));
       }).then(function (claro) {
         var conteudo = JSON.parse(new TextDecoder().decode(claro));
-        l.pasta = conteudo.pasta; l.fotos = conteudo.fotos; l.completa = conteudo.completa; l.highlight = conteudo.highlight;
+        l.pasta = conteudo.pasta; l.pasta_completa = conteudo.pasta_completa; l.fotos = conteudo.fotos; l.completa = conteudo.completa; l.highlight = conteudo.highlight;
         l.liberada = true;
         return true;
       });
@@ -146,7 +146,14 @@
         ' ainda está sendo montado. Assim que ficar pronto, aparece aqui, nesta mesma página.</p></div>';
       return;
     }
-    painel.innerHTML = '<div class="dfc-barra"><p>' + (k === 'completa' ? 'Luta completa' : 'Highlight') + (v.duracao ? ' · ' + esc(v.duracao) : '') + '</p>' +
+    var titulo = (k === 'completa' ? 'Luta completa' : 'Highlight') + (v.duracao ? ' · ' + esc(v.duracao) : '');
+    if (v.drive) {     // vídeo no Google Drive do Victor: toca no player do Google e baixa direto
+      painel.innerHTML = '<div class="dfc-barra"><p>' + titulo + '</p>' +
+        '<a class="dfc-btn dfc-btn--cheio" href="https://drive.usercontent.google.com/download?id=' + esc(v.drive) + '&export=download&confirm=t" target="_blank" rel="noopener">Baixar o vídeo' + BAIXA + '</a></div>' +
+        '<div class="dfc-video dfc-video--drive"><iframe src="https://drive.google.com/file/d/' + esc(v.drive) + '/preview" allow="autoplay; fullscreen" allowfullscreen title="' + titulo + '"></iframe></div>';
+      return;
+    }
+    painel.innerHTML = '<div class="dfc-barra"><p>' + titulo + '</p>' +
       '<a class="dfc-btn dfc-btn--cheio" href="' + esc(v.baixar || v.ver) + '" download>Baixar o vídeo' + BAIXA + '</a></div>' +
       '<div class="dfc-video"><video controls playsinline preload="metadata" poster="' + esc(l.capa) + '" src="' + esc(v.ver) + '"></video></div>';
   }
@@ -200,7 +207,7 @@
   function galeria(l) {
     fotos = l.fotos || [];
     painel.innerHTML = '<div class="dfc-barra"><p>' + fotos.length + ' fotos · toque numa foto para abrir e baixar</p>' +
-      (l.pasta ? '<a class="dfc-btn" href="' + pasta(l.pasta) + '" target="_blank" rel="noopener">Baixar todas no Google Drive' + BAIXA + '</a>' : '') +
+      (l.pasta ? '<a class="dfc-btn" href="' + pasta(l.pasta) + '" target="_blank" rel="noopener">' + (l.pasta_completa ? 'Pasta da luta no Drive (fotos e vídeo)' : 'Baixar todas no Google Drive') + BAIXA + '</a>' : '') +
       '</div><div class="dfc-grade"></div><div class="dfc-mais"></div>';
     var grade = painel.querySelector('.dfc-grade'), mais = painel.querySelector('.dfc-mais'), feito = 0;
     function lote() {
