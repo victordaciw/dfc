@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFC · Fotos e vídeos das lutas</title>
+    <meta name="description" content="Dominium Fighter Championship, Cordeirópolis-SP, 31/10/2026: as fotos e os vídeos de cada luta.">
+    <meta property="og:title" content="DFC · Fotos e vídeos das lutas">
+    <meta property="og:description" content="Ache a sua luta e baixe as fotos e o vídeo.">
+    <meta property="og:image" content="https://victordaciw.github.io/dfc/media/og.jpg">
+    <meta property="og:url" content="https://victordaciw.github.io/dfc/">
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="media/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #F9C228;
+            --secondary: #67772D;
+            --base-black: #000000;
+            --base-white: #FFFFFF;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--base-black) url(media/site-bg.webp) center / cover fixed no-repeat;
+            color: var(--base-white);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: clip;
+        }
+
+        /* Fixed Background Animation */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--base-black);
+            transition: all 0.2s ease-in-out;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn-primary:hover {
+            background-color: var(--primary);
+            filter: brightness(0.9);
+            transform: translateY(-1px);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: var(--base-black);
+            border-radius: 0px;
+            z-index: 20; /* Ensure video is above bg */
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .section-accent {
+            border-left: 4px solid var(--secondary);
+        }
+        
+        section, header, footer {
+            position: relative;
+            z-index: 10;
+        }
+
+        .delayed-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        .delayed-content.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .instagram-icon {
+            fill: url(#ig-gradient);
+            transition: transform 0.2s;
+        }
+        .youtube-icon {
+            fill: #FF0000;
+            transition: transform 0.2s;
+        }
+        .social-link:hover .instagram-icon,
+        .social-link:hover .youtube-icon {
+            transform: scale(1.1);
+        }
+
+        /* Subtle Grid Pattern */
+        .tactical-grid {
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* Bullet card animation */
+        .gated-bullet {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s ease-out;
+        }
+        .gated-bullet.revealed {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        /* Cookie consent overlay */
+        body.tms-cookie-locked { overflow: hidden; }
+        #tms-cookie-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(0,0,0,.82);
+            backdrop-filter: blur(6px);
+        }
+        #tms-cookie-overlay.active { display: flex; }
+        .tms-cookie-dialog {
+            width: min(720px, 100%);
+            background: #0b0b09;
+            color: #eeeae2;
+            border: 1px solid #3b351d;
+            box-shadow: 0 25px 80px rgba(0,0,0,.75);
+            padding: 32px;
+        }
+        .tms-cookie-dialog h2 { color: #d6b64a; margin: 0 0 16px; font-size: 1.8rem; }
+        .tms-cookie-dialog p { color: #eeeae2; margin: 0 0 16px; font-size: 1rem; }
+        .tms-cookie-dialog a { color: #F9C228; text-decoration: underline; text-underline-offset: 4px; }
+        .tms-cookie-actions { margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
+        .tms-cookie-accept {
+            border: 0;
+            cursor: pointer;
+            background: #F9C228;
+            color: #000;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            padding: 12px 18px;
+        }
+
+        /* ===== Header glass + flying logo ===== */
+        html { scroll-padding-top: 84px; }
+        .tms-header { position: fixed; top: 0; left: 0; right: 0; height: 68px; z-index: 40;
+            background: rgba(12,12,10,.38); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+            border-bottom: 1px solid rgba(255,255,255,.08); box-shadow: 0 10px 30px rgba(0,0,0,.25);
+            transform: translateY(-100%); animation: tmsHeaderIn .7s cubic-bezier(.2,.8,.2,1) 1.9s forwards; }
+        @keyframes tmsHeaderIn { to { transform: translateY(0); } }
+        .tms-header nav { position: absolute; left: 50%; transform: translateX(-50%); top: 0; height: 68px; display: flex; align-items: center; gap: 4px; }
+        .tms-header nav a { color: rgba(255,255,255,.78); font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+            padding: 8px 12px; border-radius: 999px; transition: color .2s, background .2s; text-decoration: none; }
+        .tms-header nav a:hover { color: #F9C228; background: rgba(255,255,255,.06); }
+        @media (max-width: 520px) { .tms-header nav { left: auto; right: 8px; transform: none; gap: 0; } .tms-header nav a { font-size: 11px; padding: 8px 7px; letter-spacing: .04em; } }
+        @media (max-width: 440px) { .tms-header nav a[href="#top"] { display: none; } .tms-header nav a { padding: 8px 6px; letter-spacing: .03em; } }
+
+        .tms-brand { position: fixed; left: 0; top: 0; z-index: 45; transform-origin: 0 0; will-change: transform; pointer-events: none; }
+        .tms-brand a { pointer-events: auto; display: block; }
+        .tms-brand .lyr { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .tms-brand .box { position: relative; width: 100%; aspect-ratio: 2000 / 491; container-type: inline-size; }
+        /* ™ after SOCIETY in the wordmark (Bryan, 24/10): shows once the word has drawn in */
+        .tms-brand .tm { position: absolute; left: 67.4%; top: 92.6%; font: 700 3.1cqw/1 system-ui, -apple-system, "Segoe UI", Arial, sans-serif; color: #fff; opacity: 0; animation: tmsTm .5s ease 2.45s forwards; }
+        @keyframes tmsTm { to { opacity: 1; } }
+        .tms-brand .icone { clip-path: inset(100% 0 0 0); filter: drop-shadow(0 0 0 rgba(249,194,40,0)); animation: tmsMono 1.2s cubic-bezier(.7,0,.2,1) .25s forwards, tmsGlow 2.4s ease-out 1.4s forwards; }
+        .tms-brand .sigla { opacity: 0; transform: translateY(-34%) scale(.9); animation: tmsCrown .9s cubic-bezier(.3,1.6,.4,1) 1.05s forwards; }
+        .tms-brand .nome { clip-path: inset(0 100% 0 0); animation: tmsWord 1s cubic-bezier(.7,0,.2,1) 1.45s forwards; }
+        .tms-brand .shine { position: absolute; inset: 0;
+            -webkit-mask: url(media/dfc-logo.webp) center / 100% 100% no-repeat; mask: url(media/dfc-logo.webp) center / 100% 100% no-repeat;
+            background: linear-gradient(105deg, transparent 35%, rgba(255,240,190,.95) 50%, transparent 65%) no-repeat; background-size: 250% 100%; background-position: 130% 0;
+            animation: tmsShine 1.4s ease-in-out 1.7s forwards; }
+        @keyframes tmsMono { to { clip-path: inset(0 0 0 0); } }
+        @keyframes tmsGlow { 0% { filter: drop-shadow(0 0 0 rgba(249,194,40,0)); } 40% { filter: drop-shadow(0 0 28px rgba(249,194,40,.55)); } 100% { filter: drop-shadow(0 0 10px rgba(249,194,40,.18)); } }
+        @keyframes tmsCrown { to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes tmsWord { to { clip-path: inset(0 0 0 0); } }
+        @keyframes tmsShine { to { background-position: -30% 0; } }
+        .tms-hero-spacer { height: var(--tms-hero-pad, 380px); }
+        @media (prefers-reduced-motion: reduce) {
+            .tms-brand .icone, .tms-brand .sigla, .tms-brand .nome, .tms-brand .tm { animation: none; clip-path: none; opacity: 1; transform: none; }
+            .tms-brand .shine { display: none; } .tms-header { animation: none; transform: none; }
+        }
+        /* FAQ */
+        .tms-faq details { border: 1px solid rgba(255,255,255,.1); background: rgba(0,0,0,.55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+        .tms-faq summary { cursor: pointer; list-style: none; padding: 22px 24px; font-weight: 700; font-size: 1.1rem; display: flex; justify-content: space-between; gap: 16px; }
+        .tms-faq summary::-webkit-details-marker { display: none; }
+        .tms-faq summary::after { content: "+"; color: #F9C228; font-weight: 800; font-size: 1.4rem; line-height: 1; transition: transform .2s; }
+        .tms-faq details[open] summary::after { transform: rotate(45deg); }
+        .tms-faq details p { padding: 0 24px 22px; color: rgba(255,255,255,.75); line-height: 1.7; }
+
+        /* ===== Course library (streaming-style rows) ===== */
+        .tms-lib { padding: 80px 0 90px; overflow: hidden; }
+        .tms-lib-head { max-width: 1280px; margin: 0 auto 6px; padding: 0 24px; display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+        .tms-lib-head h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -.01em; }
+        .tms-lib-head p { color: rgba(255,255,255,.6); margin-top: 6px; }
+        .tms-lib-nav { display: flex; gap: 8px; }
+        .tms-lib-nav button { width: 42px; height: 42px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06);
+            color: #fff; font-size: 18px; cursor: pointer; transition: background .2s, border-color .2s; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+        .tms-lib-nav button:hover { background: rgba(249,194,40,.18); border-color: #F9C228; }
+        .tms-row { display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+            padding: 18px max(24px, calc((100vw - 1280px) / 2 + 24px)) 26px; scrollbar-width: none; }
+        .tms-row::-webkit-scrollbar { display: none; }
+        .tms-item { flex: 0 0 auto; display: flex; align-items: flex-end; scroll-snap-align: start; scroll-margin-left: max(24px, calc((100vw - 1280px) / 2 + 24px)); }
+        .tms-num { font-size: clamp(110px, 14vw, 190px); font-weight: 900; line-height: .78; letter-spacing: -.06em; color: #000;
+            -webkit-text-stroke: 2px rgba(249,194,40,.75); margin-right: -14px; user-select: none; position: relative; z-index: 0; }
+        .tms-cover { position: relative; z-index: 1; width: clamp(160px, 18vw, 250px); aspect-ratio: 2 / 3; overflow: hidden; border-radius: 6px;
+            box-shadow: 0 14px 40px rgba(0,0,0,.55); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; cursor: pointer;
+            background: radial-gradient(120% 70% at 50% 0%, rgba(249,194,40,.28), transparent 60%), linear-gradient(180deg, #17140c 0%, #050505 70%); border: 1px solid rgba(249,194,40,.22); }
+        .tms-cover:hover { transform: translateY(-6px) scale(1.05); box-shadow: 0 22px 60px rgba(0,0,0,.7), 0 0 0 1px rgba(249,194,40,.6); }
+        .tms-cover img.art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .tms-cover .mark { position: absolute; left: 50%; top: 16%; width: 46%; transform: translateX(-50%); opacity: .9; filter: drop-shadow(0 6px 16px rgba(0,0,0,.6)); }
+        .tms-cover .badge { position: absolute; top: 8px; left: 8px; background: #fff; color: #000; font-size: 11px; font-weight: 800; padding: 3px 7px; letter-spacing: .02em; }
+        .tms-cover .badge.gold { background: #F9C228; }
+        .tms-cover .meta { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 14px 16px; background: linear-gradient(transparent, rgba(0,0,0,.92) 45%); }
+        .tms-cover .mod { color: #F9C228; font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
+        .tms-cover .ttl { color: #fff; font-weight: 800; font-size: 17px; line-height: 1.15; margin-top: 4px; text-transform: uppercase; letter-spacing: .01em; }
+        .tms-row-head { max-width: 1280px; margin: 26px auto 0; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+        .tms-row-head + .tms-row { padding-top: 12px; }
+        .tms-lib .row-title { font-weight: 800; font-size: 1.2rem; letter-spacing: .02em; text-transform: uppercase; color: rgba(255,255,255,.92); }
+        .tms-lib .row-title span { color: #F9C228; font-size: .72rem; letter-spacing: .24em; margin-left: 10px; vertical-align: 2px; }
+        @media (max-width: 640px) { .tms-row-head .tms-lib-nav { display: none; } .tms-lib .row-title { font-size: 1.05rem; white-space: nowrap; } }
+
+        /* ===== Outcomes, Linear-style ===== */
+        .lx { padding: 110px 20px 100px; }
+        .lx-wrap { max-width: 1200px; margin: 0 auto; }
+        .lx-intro { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: end; margin-bottom: 72px; }
+        .lx-intro h2 { font-size: clamp(34px, 4.6vw, 56px); font-weight: 600; line-height: 1.02; letter-spacing: -0.022em; color: #fff; }
+        .lx-intro p { font-size: 19px; line-height: 1.45; color: #d0d6e0; letter-spacing: -0.012em; max-width: 440px; }
+        .lx-link { display: inline-flex; gap: 10px; align-items: center; margin-top: 22px; font-size: 13px; color: #8a8f98; text-decoration: none; transition: color .2s; }
+        .lx-link span { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #F9C228; }
+        .lx-link i { font-style: normal; transition: transform .2s; }
+        .lx-link:hover { color: #fff; } .lx-link:hover i { transform: translateX(3px); }
+        .lx-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 0.5px solid #23252a; }
+        .lx-cell { padding: 40px 32px 44px; border-bottom: 0.5px solid #23252a; }
+        .lx-cell:not(:nth-child(3n+1)) { border-left: 0.5px solid #23252a; }
+        .lx-art { height: 190px; display: flex; align-items: center; justify-content: center; margin-bottom: 34px; }
+        .lx-art svg { height: 100%; width: auto; max-width: 100%; overflow: visible; }
+        .lx-art .ln { fill: #08090a; stroke: rgba(255,255,255,.34); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; transition: stroke .4s; }
+        .lx-art .au { fill: #0c0b07; stroke: rgba(249,194,40,.85); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+        .lx-cell:hover .ln { stroke: rgba(255,255,255,.6); }
+        .lx-idx { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #F9C228; margin-bottom: 10px; }
+        .lx-cell h3 { font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.011em; margin-bottom: 8px; }
+        .lx-cell p { font-size: 14px; line-height: 1.55; color: #8a8f98; letter-spacing: -0.01em; max-width: 300px; }
+        @media (max-width: 900px) {
+            .lx-intro { grid-template-columns: 1fr; gap: 20px; margin-bottom: 48px; }
+            .lx-grid { grid-template-columns: 1fr 1fr; }
+            .lx-cell:not(:nth-child(3n+1)) { border-left: 0; }
+            .lx-cell:nth-child(2n) { border-left: 0.5px solid #23252a; }
+        }
+        @media (max-width: 560px) {
+            .lx-grid { grid-template-columns: 1fr; }
+            .lx-cell:nth-child(2n) { border-left: 0; }
+            .lx-cell { padding: 36px 8px; } .lx-art { height: 160px; }
+        }
+
+        /* Hero title: condensed, uppercase, both lines the same width */
+        .tms-title { font-family: 'Anton', 'Inter', sans-serif; font-weight: 400; text-transform: uppercase; line-height: .92;
+            display: block; letter-spacing: .005em; }
+        .tms-title span { display: table; margin: 0 auto; white-space: nowrap; }
+        .tms-title .l1 { font-size: clamp(40px, 7.4vw, 96px); }
+        .tms-title .l2 { font-size: clamp(28px, 5.2vw, 68px); }
+
+        /* ===== Outcomes: scroll-driven showcase ===== */
+        .lx-scroller { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; border-top: 0.5px solid #23252a; }
+        .lx-stage { position: sticky; top: 90px; height: calc(100vh - 120px); display: flex; flex-direction: column; justify-content: center; }
+        .lx-figs { position: relative; height: min(52vh, 420px); }
+        .lx-fig { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(24px) scale(.94);
+            transition: opacity .6s ease, transform .8s cubic-bezier(.2,.8,.2,1); }
+        .lx-fig.on { opacity: 1; transform: none; }
+        .lx-fig svg, .lx-fig-m svg { height: 100%; width: auto; max-width: 100%; overflow: visible; }
+        .lx-fig .ln, .lx-fig-m .ln { fill: #08090a; stroke: rgba(255,255,255,.4); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+        .lx-fig .au, .lx-fig-m .au { fill: #0c0b07; stroke: rgba(249,194,40,.9); stroke-width: 1.2; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+        .lx-fig.on .ln, .lx-fig.on .au { stroke-dasharray: 100; animation: lxDraw 1.4s cubic-bezier(.6,0,.2,1) both; }
+        .lx-fig.on .au { animation-delay: .35s; }
+        @keyframes lxDraw { from { stroke-dashoffset: 100; fill-opacity: 0; } 60% { fill-opacity: 0; } to { stroke-dashoffset: 0; fill-opacity: 1; } }
+        .lx-meter { display: flex; align-items: center; gap: 14px; margin-top: 36px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #62666d; }
+        .lx-count { color: #F9C228; }
+        .lx-bar { flex: 1; height: 1px; background: #23252a; position: relative; overflow: hidden; }
+        .lx-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 16.66%; background: #F9C228; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+        .lx-steps { padding: 8vh 0 18vh; }
+        .lx-step { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; padding: 24px 0; opacity: .28; transition: opacity .5s; }
+        .lx-step.on { opacity: 1; }
+        .lx-step .lx-idx { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: #F9C228; margin-bottom: 18px; }
+        .lx-step .lx-idx span { color: #62666d; }
+        .lx-step h3 { font-size: clamp(26px, 2.6vw, 36px); font-weight: 600; line-height: 1.1; letter-spacing: -0.022em; color: #fff; margin-bottom: 14px; }
+        .lx-step p { font-size: 17px; line-height: 1.55; color: #8a8f98; max-width: 460px; margin-bottom: 22px; }
+        .lx-step ul { list-style: none; display: grid; gap: 0; max-width: 460px; border-top: 0.5px solid #23252a; }
+        .lx-step li { padding: 13px 0 13px 26px; border-bottom: 0.5px solid #23252a; color: #d0d6e0; font-size: 15px; position: relative; letter-spacing: -0.011em;
+            transform: translateX(-6px); opacity: 0; transition: transform .5s, opacity .5s; }
+        .lx-step li::before { content: ""; position: absolute; left: 2px; top: 50%; width: 8px; height: 8px; border: 1px solid #F9C228; transform: translateY(-50%) rotate(45deg); }
+        .lx-step.on li { transform: none; opacity: 1; }
+        .lx-step.on li:nth-child(2) { transition-delay: .08s; } .lx-step.on li:nth-child(3) { transition-delay: .16s; }
+        .lx-fig-m { display: none; }
+        @media (max-width: 900px) {
+            .lx-scroller { grid-template-columns: 1fr; gap: 0; }
+            .lx-stage { display: none; }
+            .lx-steps { padding: 20px 0 0; }
+            .lx-step { min-height: 0; padding: 44px 0; opacity: 1; border-bottom: 0.5px solid #23252a; }
+            .lx-step li { opacity: 1; transform: none; }
+            .lx-fig-m { display: flex; justify-content: center; height: 170px; margin-bottom: 28px; }
+        }
+        @media (prefers-reduced-motion: reduce) { .lx-fig.on .ln, .lx-fig.on .au { animation: none; stroke-dasharray: none; } }
+
+        /* ===== Hero, MasterClass-newsroom style ===== */
+        .mc-hero { padding: 48px 0 90px; }
+        .mc-wrap { max-width: 1320px; margin: 0 auto; padding: 0 clamp(18px, 4vw, 56px); container-type: inline-size; }
+        .mc-title { position: relative; z-index: 3; line-height: 1; letter-spacing: -.005em; pointer-events: none; }
+        .mc-title span { margin: 0 !important; }
+        .mc-title .l2 { margin-top: .1em !important; }
+        .mc-title .l1 { font-size: calc(100cqw / 8.81 * .965) !important; }
+        .mc-title .l2 { font-size: calc(100cqw / 12.12 * .965) !important; }
+        .mc-body { display: grid; grid-template-columns: minmax(220px, 34%) 1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }
+        .mc-copy { padding-top: clamp(40px, 5vw, 80px); }
+        .mc-bar { display: block; width: 64px; height: 9px; background: #F9C228; margin-bottom: 30px; }
+        .mc-copy p { font-size: clamp(16px, 1.35vw, 19px); line-height: 1.7; color: rgba(255,255,255,.82); max-width: 380px; }
+        .mc-link { display: inline-flex; gap: 8px; margin-top: 26px; color: #fff; font-size: 14px; font-weight: 600; letter-spacing: .02em; text-decoration: none;
+            border-bottom: 1px solid rgba(249,194,40,.6); padding-bottom: 4px; transition: color .2s, border-color .2s; }
+        .mc-link:hover { color: #F9C228; border-color: #F9C228; }
+        .mc-media { position: relative; z-index: 1; }
+        .mc-body { margin-top: clamp(22px, 3vw, 44px); }
+        .mc-media .video-container { box-shadow: 0 30px 80px rgba(0,0,0,.6); border: 0; }
+        @media (max-width: 860px) {
+            .mc-body { grid-template-columns: 1fr; gap: 0; }
+            .mc-media { order: 1; margin-top: 10px; }
+            .mc-copy { order: 2; padding-top: 34px; }
+        }
+    </style>
+<style>
+/* ===== Trench kit (sections from Bryan's page, 21/10/2026) ===== */
+/* ==========================================================================================
+   TRENCH KIT (tk-) — shared primitives for the new sections, distilled from the approved
+   pricing (.tms-pr), outcomes (.lx) and footer (.tms-ft) sections. Section CSS may only add
+   layout on top of these; it must not invent new colors, fonts, borders or bullets.
+   ========================================================================================== */
+.tk{
+  --tk-gold:#F9C228; --tk-gold-rgb:249,194,40;
+  --tk-ant:#C8A05E;  --tk-ant-rgb:200,160,94;
+  --tk-text:#e9e9ec; --tk-soft:rgba(255,255,255,.74); --tk-dim:#a2a6ae; --tk-mute:#8a8f98; --tk-faint:#62666d;
+  --tk-hair:rgba(255,255,255,.09); --tk-line:#23252a;
+  --tk-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .92 0 0 0 0 .8 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --tk-display:'Anton','Inter',sans-serif;
+  --tk-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+  position:relative; z-index:10; padding:112px 24px;
+  color:var(--tk-text); font-family:'Inter',system-ui,-apple-system,sans-serif; line-height:1.5;
+}
+.tk *, .tk *::before, .tk *::after{ box-sizing:border-box; }
+.tk h2, .tk h3, .tk h4, .tk p, .tk ul, .tk ol, .tk figure, .tk blockquote{ margin:0; padding:0; }
+.tk ul, .tk ol{ list-style:none; }
+.tk a{ text-decoration:none; color:inherit; -webkit-tap-highlight-color:transparent; }
+.tk svg{ display:block; }
+.tk .tk-sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+.tk .tk-wrap{ max-width:1200px; margin:0 auto; }
+.tk .tk-wrap--narrow{ max-width:860px; }
+.tk--tight{ padding-top:72px; padding-bottom:72px; }        /* for a section that continues the previous one */
+
+/* ---------- caption: small antique capitals between hairlines (the pricing "THREE WAYS IN") ---------- */
+.tk .tk-cap{ display:inline-flex; align-items:center; gap:14px; font-size:11.5px; font-weight:700; line-height:1; letter-spacing:.28em; text-transform:uppercase; color:var(--tk-ant); }
+.tk .tk-cap::before, .tk .tk-cap::after{ content:""; display:block; width:40px; height:1px; background:linear-gradient(90deg, rgba(var(--tk-ant-rgb),0), rgba(var(--tk-ant-rgb),.85)); }
+.tk .tk-cap::after{ transform:scaleX(-1); margin-left:-.28em; }
+.tk .tk-cap--left::after{ display:none; }                      /* left-aligned sections: one leading hairline */
+
+/* ---------- display headings: Anton capitals (hero / pricing family) ---------- */
+.tk .tk-h{ font-family:var(--tk-display); font-weight:400; text-transform:uppercase; line-height:.98; letter-spacing:.005em; color:#fff; text-wrap:balance; }
+.tk .tk-h--xl{ font-size:clamp(44px, 6.2vw, 90px); }
+.tk .tk-h--l { font-size:clamp(36px, 4.6vw, 66px); }
+.tk .tk-h--m { font-size:clamp(28px, 3vw, 42px); line-height:1.04; }
+.tk .tk-h--s { font-size:26px; line-height:1.08; letter-spacing:.03em; }
+.tk .tk-h--xs{ font-size:20px; line-height:1.15; letter-spacing:.04em; }
+.tk .tk-acc{ color:var(--tk-gold); font-style:normal; }       /* the gold accent inside a heading */
+.tk .tk-ant{ color:var(--tk-ant); font-style:normal; }
+
+/* Equal-width lines (the hero / pricing trick): every span fills the heading's width.
+   Usage: <h2 class="tk-h tk-fit" style="--fit-w:620px"><span style="--k:9.3">IT'S NOTHING SHORT OF HARD WORK.</span><span class="tk-acc" style="--k:6.6">ARE YOU READY?</span></h2>
+   kit.js measures the real --k of each line on load; the inline --k is only the no-JS fallback (line width in em). */
+.tk .tk-fit{ container-type:inline-size; width:min(100%, var(--fit-w, 560px)); margin-inline:auto; line-height:1; }
+.tk .tk-fit > span{ display:block; white-space:nowrap; font-size:calc(100cqw / var(--k, 8)); }
+.tk .tk-fit > span + span{ margin-top:.12em; }
+.tk .tk-tm{ font-size:.32em; vertical-align:top; position:relative; top:.18em; margin-left:.04em; letter-spacing:0; }
+
+/* ---------- quote / question headings: Inter 600, tight (the .lx family) ---------- */
+.tk .tk-q{ font-size:clamp(26px, 2.8vw, 38px); font-weight:600; line-height:1.12; letter-spacing:-.022em; color:#fff; text-wrap:balance; }
+.tk .tk-q--s{ font-size:clamp(22px, 2.1vw, 28px); }
+
+/* ---------- text ---------- */
+.tk .tk-lead{ font-size:clamp(16.5px, 1.35vw, 19px); line-height:1.6; color:var(--tk-soft); max-width:640px; text-wrap:pretty; }
+.tk .tk-body p{ font-size:clamp(16px, 1.2vw, 17.5px); line-height:1.72; color:rgba(255,255,255,.78); text-wrap:pretty; }
+.tk .tk-body p + p{ margin-top:1.05em; }
+.tk .tk-body strong{ color:#fff; font-weight:700; }
+.tk .tk-src{ font-size:12.5px; line-height:1.6; letter-spacing:.01em; color:var(--tk-mute); text-wrap:pretty; }
+.tk .tk-src a{ color:var(--tk-dim); border-bottom:1px solid rgba(var(--tk-ant-rgb),.45); transition:color .2s, border-color .2s; }
+.tk .tk-src a:hover{ color:#fff; border-color:var(--tk-gold); }
+
+/* ---------- mono index (01 / 06) ---------- */
+.tk .tk-idx{ font-family:var(--tk-mono); font-size:12.5px; line-height:1; color:var(--tk-gold); letter-spacing:.02em; }
+.tk .tk-idx span{ color:var(--tk-faint); }
+
+/* ---------- outlined numeral (the library's big numbers) ---------- */
+.tk .tk-num{ font-family:var(--tk-display); font-weight:400; line-height:.8; letter-spacing:.01em; color:transparent; -webkit-text-stroke:1.5px rgba(var(--tk-gold-rgb),.7); user-select:none; }
+
+/* ---------- hairlines ---------- */
+.tk .tk-rule{ height:0; border:0; border-top:.5px solid var(--tk-line); }
+.tk .tk-goldline{ height:1px; background:linear-gradient(90deg, rgba(var(--tk-ant-rgb),0), rgba(var(--tk-ant-rgb),.8) 50%, rgba(var(--tk-ant-rgb),0)); }
+
+/* ---------- card: worn-paper grain, gold hairline on the top edge (the pricing card) ---------- */
+.tk .tk-card{
+  position:relative; padding:36px 32px;
+  border:1px solid rgba(255,255,255,.1);
+  background:var(--tk-grain), linear-gradient(180deg, rgba(24,21,14,.82) 0%, rgba(9,9,8,.88) 100%);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  box-shadow:0 30px 70px -36px rgba(0,0,0,.9);
+  transition:border-color .3s ease, box-shadow .3s ease;
+}
+.tk .tk-card::before{ content:""; position:absolute; left:-1px; right:-1px; top:-1px; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, rgba(var(--tk-ant-rgb),0), rgba(var(--tk-ant-rgb),.8) 50%, rgba(var(--tk-ant-rgb),0)); }
+.tk .tk-card--gold{
+  border-color:rgba(var(--tk-gold-rgb),.55);
+  background:var(--tk-grain), radial-gradient(70% 180px at 50% 0%, rgba(var(--tk-gold-rgb),.11), rgba(var(--tk-gold-rgb),0)),
+             linear-gradient(180deg, rgba(28,24,13,.86) 0%, rgba(9,9,8,.9) 100%);
+  box-shadow:0 0 0 1px rgba(var(--tk-gold-rgb),.1), 0 40px 90px -42px rgba(var(--tk-gold-rgb),.32);
+}
+.tk .tk-card--gold::before{ height:2px; top:-2px; background:linear-gradient(90deg, rgba(var(--tk-gold-rgb),0), var(--tk-gold) 50%, rgba(var(--tk-gold-rgb),0)); }
+.tk .tk-card--quiet{ background:var(--tk-grain), linear-gradient(180deg, rgba(16,16,15,.7) 0%, rgba(8,8,8,.8) 100%); border-color:rgba(255,255,255,.07); }
+.tk .tk-card--quiet::before{ opacity:.35; }
+
+/* crown medallion sitting on a card's top edge (same as pricing / footer). Markup: snippets-medal.html, with class tms-pr-medal renamed to tk-medal */
+.tk .tk-medal{ position:absolute; z-index:1; left:50%; top:0; width:44px; height:44px; margin:-23px 0 0 -22px; display:grid; place-items:center; border-radius:50%;
+  color:var(--tk-ant); border:1px solid var(--tk-gold); background:#0d0c09; box-shadow:0 8px 24px rgba(0,0,0,.55), 0 0 22px rgba(var(--tk-gold-rgb),.2); }
+.tk .tk-medal svg{ width:21px; height:auto; aspect-ratio:354/197; fill:currentColor; }
+
+/* small framed label (pricing badge) */
+.tk .tk-badge{ display:inline-block; padding:6px 8px 6px 10px; border:1px solid rgba(var(--tk-ant-rgb),.55); font-size:10.5px; font-weight:700; line-height:1; letter-spacing:.2em; text-transform:uppercase; color:var(--tk-ant); white-space:nowrap; }
+.tk .tk-badge--solid{ background:var(--tk-gold); border-color:var(--tk-gold); color:#0a0a0a; }
+
+/* ---------- lists ---------- */
+/* positive: the site's bullet, a small gold diamond */
+.tk .tk-list{ display:grid; gap:12px; }
+.tk .tk-list li{ position:relative; padding-left:24px; font-size:15.5px; line-height:1.55; color:var(--tk-text); }
+.tk .tk-list li::before{ content:""; position:absolute; left:2px; top:calc(.775em - 3.5px); width:7px; height:7px; border:1px solid var(--tk-gold); transform:rotate(45deg); }
+.tk .tk-list--solid li::before{ background:var(--tk-gold); }
+/* ruled variant (the .lx list): hairline between rows */
+.tk .tk-list--ruled{ gap:0; border-top:.5px solid var(--tk-line); }
+.tk .tk-list--ruled li{ padding-top:14px; padding-bottom:14px; border-bottom:.5px solid var(--tk-line); }
+.tk .tk-list--ruled li::before{ top:calc(14px + .775em - 3.5px); }
+/* negative: a thin cross in antique (never red), drawn with two hairlines */
+.tk .tk-list--no li::before, .tk .tk-x{ border:0; transform:none; width:10px; height:10px; top:calc(.775em - 5px);
+  background:linear-gradient(45deg, transparent calc(50% - .6px), rgba(var(--tk-ant-rgb),.9) calc(50% - .6px), rgba(var(--tk-ant-rgb),.9) calc(50% + .6px), transparent calc(50% + .6px)),
+             linear-gradient(-45deg, transparent calc(50% - .6px), rgba(var(--tk-ant-rgb),.9) calc(50% - .6px), rgba(var(--tk-ant-rgb),.9) calc(50% + .6px), transparent calc(50% + .6px)); }
+.tk .tk-list--ruled.tk-list--no li::before{ top:calc(14px + .775em - 5px); }
+.tk .tk-x{ display:inline-block; position:relative; top:auto; flex:0 0 auto; }
+.tk .tk-list--muted li{ color:var(--tk-dim); }
+.tk .tk-list--muted li::before{ opacity:.6; }
+
+/* ---------- buttons (pricing button) ---------- */
+.tk .tk-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:54px; padding:0 26px;
+  font-family:var(--tk-display); font-weight:400; font-size:17px; line-height:1; letter-spacing:.07em; text-transform:uppercase; text-align:center;
+  color:var(--tk-gold); border:1px solid rgba(var(--tk-gold-rgb),.6); background:rgba(var(--tk-gold-rgb),.03);
+  transition:background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .25s ease;
+}
+.tk .tk-btn svg{ flex:0 0 auto; width:15px; height:15px; transition:transform .25s cubic-bezier(.2,.8,.2,1); }
+.tk .tk-btn:hover, .tk .tk-btn:focus-visible{ background-color:var(--tk-gold); border-color:var(--tk-gold); color:#0a0a0a; }
+.tk .tk-btn:hover svg, .tk .tk-btn:focus-visible svg{ transform:translateX(3px); }
+.tk .tk-btn:focus-visible{ outline:2px solid var(--tk-gold); outline-offset:3px; }
+.tk .tk-btn--solid{ background-color:var(--tk-gold); border-color:var(--tk-gold); color:#0a0a0a; box-shadow:0 12px 30px -14px rgba(var(--tk-gold-rgb),.6); }
+.tk .tk-btn--solid:hover, .tk .tk-btn--solid:focus-visible{ background-color:#ffd24a; border-color:#ffd24a; box-shadow:0 16px 38px -14px rgba(var(--tk-gold-rgb),.8); }
+/* arrow svg for buttons: see snippets-arrow.html (copy it verbatim) */
+
+/* ---------- video frame ---------- */
+.tk .tk-video{ position:relative; max-width:960px; margin:0 auto; }
+.tk .tk-video .video-container{ box-shadow:0 30px 80px rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.08); }
+.tk .tk-video::before{ content:""; position:absolute; left:8%; right:8%; top:-1px; height:1px; z-index:21; pointer-events:none;
+  background:linear-gradient(90deg, rgba(var(--tk-ant-rgb),0), rgba(var(--tk-ant-rgb),.85) 50%, rgba(var(--tk-ant-rgb),0)); }
+
+/* ---------- one-time arrival (JS adds tk--armed, then tk--in; without JS / with reduced motion the section is simply there) ---------- */
+.tk.tk--armed .tk-rise{ opacity:0; transform:translateY(18px); }
+.tk.tk--in .tk-rise{ opacity:1; transform:none; transition:opacity .7s ease, transform .9s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--d, 0) * 80ms); }
+
+/* ---------- responsive base ---------- */
+@media (max-width: 900px){
+  .tk{ padding:88px 20px; }
+  .tk--tight{ padding-top:56px; padding-bottom:56px; }
+  .tk .tk-card{ padding:32px 24px; }
+}
+@media (max-width: 400px){
+  .tk{ padding:72px 16px; }
+  .tk .tk-card{ padding:30px 20px; }
+  .tk .tk-cap{ letter-spacing:.22em; gap:10px; }
+  .tk .tk-cap::before, .tk .tk-cap::after{ width:28px; }
+}
+@media (max-width: 560px){
+  .tk .tk-cap{ letter-spacing:.2em; text-align:center; }
+  .tk .tk-cap--long::before, .tk .tk-cap--long::after{ display:none; }   /* long captions drop the hairlines on phones instead of wrapping between them */
+}
+@media (prefers-reduced-motion: reduce){
+  .tk .tk-btn, .tk .tk-btn svg, .tk .tk-card{ transition:none; }
+}
+
+</style>
+<!-- styles from sections/a-problem.html -->
+<style>
+/* ================= S1 numbers (.tk-stats) ================= */
+.tk-stats{ padding-bottom:88px; }
+.tk-stats .tk-wrap{ display:grid; justify-items:center; }
+.tk-stats .tk-stats-cap{ margin-bottom:56px; }
+
+/* one open row on hairlines: each cell draws its own segment of the top and bottom rule, so the
+   outer ends fade out while the inner joints stay solid and meet the vertical rules cleanly */
+.tk-stats .tk-stats-row{ --rule:var(--tk-line); --fade:min(140px, 55%);
+  width:100%; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); }
+.tk-stats .tk-stats-cell{ position:relative; display:flex; flex-direction:column; padding:40px 32px 44px; }
+.tk-stats .tk-stats-cell + .tk-stats-cell{ border-left:.5px solid var(--rule); }
+.tk-stats .tk-stats-cell::before, .tk-stats .tk-stats-cell::after{ content:""; position:absolute; left:0; right:0; height:0; border-top:.5px solid var(--rule); pointer-events:none; }
+.tk-stats .tk-stats-cell::before{ top:0; }
+.tk-stats .tk-stats-cell::after{ bottom:0; }
+.tk-stats .tk-stats-cell:first-child::before, .tk-stats .tk-stats-cell:first-child::after{
+  border-image:linear-gradient(90deg, rgba(35,37,42,0), var(--rule) var(--fade)) 1; }
+.tk-stats .tk-stats-cell:last-child::before, .tk-stats .tk-stats-cell:last-child::after{
+  border-image:linear-gradient(270deg, rgba(35,37,42,0), var(--rule) var(--fade)) 1; }
+
+.tk-stats .tk-idx{ display:block; }
+.tk-stats .tk-stats-fig{ margin-top:30px; font-family:var(--tk-display); font-weight:400; font-size:clamp(60px, 5.6vw, 84px); line-height:.86; letter-spacing:0; color:#fff; white-space:nowrap; }
+.tk-stats .tk-stats-unit{ display:inline-block; font-size:.42em; vertical-align:top; margin:.08em 0 0 .06em; color:var(--tk-ant); }
+.tk-stats .tk-stats-in{ display:inline-block; font-size:.42em; margin:0 .1em 0 .26em; letter-spacing:.04em; text-transform:uppercase; color:var(--tk-ant); }
+.tk-stats .tk-stats-txt{ margin-top:20px; max-width:22ch; font-size:15px; line-height:1.55; color:var(--tk-dim); text-wrap:pretty; }
+.tk-stats .tk-stats-src{ max-width:820px; margin-top:32px; text-align:center; text-wrap:balance; }
+
+@media (max-width: 1080px){
+  .tk-stats .tk-stats-cell{ padding:36px 24px 40px; }
+}
+@media (max-width: 900px){
+  .tk-stats{ padding-bottom:72px; }
+  .tk-stats .tk-stats-cap{ margin-bottom:44px; }
+  .tk-stats .tk-stats-row{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .tk-stats .tk-stats-cell{ padding:36px 32px 40px; }
+  .tk-stats .tk-stats-cell + .tk-stats-cell{ border-left:0; }
+  .tk-stats .tk-stats-cell:nth-child(2n){ border-left:.5px solid var(--rule); }
+  /* left column fades in from the left edge, right column fades out to the right edge */
+  .tk-stats .tk-stats-cell:nth-child(2n+1)::before, .tk-stats .tk-stats-cell:nth-child(2n+1)::after{ border-image:linear-gradient(90deg, rgba(35,37,42,0), var(--rule) var(--fade)) 1; }
+  .tk-stats .tk-stats-cell:nth-child(2n)::before, .tk-stats .tk-stats-cell:nth-child(2n)::after{ border-image:linear-gradient(270deg, rgba(35,37,42,0), var(--rule) var(--fade)) 1; }
+  .tk-stats .tk-stats-cell:nth-child(-n+2)::after{ display:none; }    /* row 2's top rule is the joint */
+  .tk-stats .tk-stats-fig{ font-size:clamp(56px, 8vw, 76px); }
+}
+@media (max-width: 560px){
+  .tk-stats .tk-stats-cap{ line-height:1.7; text-wrap:balance; max-width:22em; }
+  .tk-stats .tk-stats-row{ --fade:min(90px, 55%); }
+  .tk-stats .tk-stats-cell{ padding:28px 16px 30px; }
+  .tk-stats .tk-stats-fig{ margin-top:22px; font-size:clamp(40px, 12vw, 52px); }
+  .tk-stats .tk-stats-txt{ margin-top:14px; font-size:14px; }
+  .tk-stats .tk-stats-src{ margin-top:28px; }
+}
+
+/* ================= S2 problem (.tk-cash) ================= */
+.tk-cash .tk-cash-grid{ display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); column-gap:96px; row-gap:28px;
+  grid-template-areas:"cap ." "main card"; align-items:start; }
+.tk-cash .tk-cash-cap{ grid-area:cap; }
+.tk-cash .tk-cash-main{ grid-area:main; }
+.tk-cash .tk-cash-h .tk-acc{ white-space:nowrap; }
+.tk-cash .tk-cash-answer{ margin-top:40px; }
+.tk-cash .tk-cash-body{ margin-top:20px; max-width:600px; }
+.tk-cash .tk-cash-src{ margin-top:32px; max-width:600px; }
+
+.tk-cash .tk-cash-card{ grid-area:card; position:sticky; top:100px; margin-top:3px; }   /* 3px: optical match with the heading's cap line */
+.tk-cash .tk-cash-card-h{ margin-bottom:24px; text-wrap:balance; }
+.tk-cash .tk-cash-list li{ text-wrap:pretty; }
+
+@media (max-width: 1080px){
+  .tk-cash .tk-cash-grid{ grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); column-gap:56px; }
+  .tk-cash .tk-cash-card{ padding:32px 28px; }
+}
+@media (max-width: 900px){
+  .tk-cash .tk-cash-grid{ grid-template-columns:minmax(0,1fr); grid-template-areas:"cap" "main" "card"; row-gap:24px; }
+  .tk-cash .tk-cash-card{ position:relative; top:auto; margin-top:32px; }
+  .tk-cash .tk-cash-answer{ margin-top:32px; }
+}
+</style>
+<!-- styles from sections/b-videos-questions.html -->
+<style>
+/* ===== Group B: video sections (S3, S8) and the two questions (S4) ===== */
+
+/* ---------- S3 / S8 · one video component: centered quote, quiet subtitle, framed film ---------- */
+.tk-vid .tk-vid-head{ display:grid; justify-items:center; gap:20px; text-align:center; margin:0 auto 64px; }
+.tk-vid .tk-vid-q{ font-size:clamp(28px, 3.2vw, 46px); line-height:1.1; letter-spacing:-.026em; }
+.tk-vid .tk-vid-ln{ display:block; }
+.tk-vid .tk-vid-sub{ max-width:52ch; margin:0 auto; color:var(--tk-dim); text-wrap:balance; }
+
+/* ---------- S4 · two questions: editorial rows on hairlines (the .lx steps) ---------- */
+.tk-qs{ --qs-col:minmax(0, 1fr) minmax(0, 3fr); --qs-gap:32px; }
+.tk-qs .tk-qs-cap{ margin-bottom:40px; }
+.tk-qs .tk-qs-rows{ border-top:.5px solid var(--tk-line); }
+.tk-qs .tk-qs-row{ display:grid; grid-template-columns:var(--qs-col); column-gap:var(--qs-gap); align-items:first baseline;
+  padding:52px 0 56px; border-bottom:.5px solid var(--tk-line); }
+.tk-qs .tk-qs-hang{ margin-left:-.4em; }                 /* hanging quote: the words line up with the answer below */
+.tk-qs .tk-qs-a{ margin-top:20px; max-width:60ch; font-size:17px; line-height:1.65; color:var(--tk-dim); text-wrap:pretty; }
+.tk-qs .tk-qs-close{ display:grid; grid-template-columns:var(--qs-col); column-gap:var(--qs-gap); align-items:first baseline; margin-top:88px; }
+.tk-qs .tk-qs-bar{ display:block; width:64px; height:9px; background:var(--tk-gold);
+  font-size:clamp(28px, 3vw, 42px); position:relative; top:calc(4.5px - .43em); }   /* sits on the middle of the first line's capitals (Anton cap height .86em) */
+.tk-qs .tk-qs-punch > span, .tk-qs .tk-qs-punch > em{ display:block; }
+.tk-qs .tk-qs-punch > em{ margin-top:.18em; }
+
+@media (max-width: 760px){
+  .tk-vid .tk-vid-ln{ display:inline; }
+  .tk-vid .tk-vid-head{ margin-bottom:44px; }
+}
+@media (max-width: 640px){
+  .tk-qs .tk-qs-row, .tk-qs .tk-qs-close{ display:block; }
+  .tk-qs .tk-qs-row{ padding:40px 0 44px; }
+  .tk-qs .tk-qs-idx{ margin-bottom:18px; }
+  .tk-qs .tk-qs-hang{ margin-left:0; }                 /* no room to hang in a phone gutter */
+  .tk-qs .tk-qs-a{ font-size:16px; }
+  .tk-qs .tk-qs-close{ margin-top:64px; }
+  .tk-qs .tk-qs-bar{ margin-bottom:28px; top:0; }
+}
+@media (max-width: 400px){
+  .tk-qs .tk-qs-cap{ letter-spacing:.17em; text-align:left; }   /* keeps the caption on one line beside its hairline at 360 */
+}
+</style>
+<!-- styles from sections/c-pe.html -->
+<style>
+/* ===== S5 private equity truth (.tk-pe) ===== */
+.tk-pe .tk-pe-head{ display:grid; justify-items:start; gap:24px; margin-bottom:64px; }
+.tk-pe .tk-pe-h > span, .tk-pe .tk-pe-h em{ display:block; }
+.tk-pe .tk-pe-lead{ max-width:600px; text-wrap:balance; }
+
+/* three cards: numeral / title / text rows shared across the cards (subgrid), so titles and hairlines line up */
+.tk-pe .tk-pe-cards{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); grid-template-rows:auto auto 1fr; column-gap:20px; row-gap:0; }
+.tk-pe .tk-pe-card{ display:grid; grid-row:span 3; grid-template-rows:subgrid; row-gap:0; padding:40px 32px 36px; }
+.tk-pe .tk-pe-card:hover{ border-color:rgba(var(--tk-ant-rgb),.4); }
+.tk-pe .tk-pe-num{ display:block; font-size:92px; }
+.tk-pe .tk-pe-t{ align-self:start; margin-top:36px; }
+.tk-pe .tk-pe-p{ margin-top:24px; padding-top:22px; border-top:1px solid var(--tk-hair); font-size:15.5px; line-height:1.68; color:var(--tk-dim); text-wrap:pretty; }
+.tk-pe .tk-pe-p strong{ font-weight:600; color:#fff; }
+
+/* the 5-year window: the climax */
+.tk-pe .tk-pe-call{ display:grid; justify-items:center; max-width:960px; margin:96px auto 0; padding:76px 48px 52px; text-align:center; }
+.tk-pe .tk-pe-call-t{ letter-spacing:.01em; }
+.tk-pe .tk-pe-nb{ white-space:nowrap; }
+.tk-pe .tk-pe-call-p{ max-width:56ch; margin-top:28px; font-size:22px; font-weight:600; line-height:1.45; letter-spacing:-.014em; color:#fff; text-wrap:balance; }
+.tk-pe .tk-pe-call-line{ width:min(320px, 70%); margin-top:40px; }
+.tk-pe .tk-pe-src{ max-width:62ch; margin-top:22px; text-wrap:balance; }
+
+/* below ~1100 the plaque would sit a few px inside the cards' edges: let it take the full width instead */
+@media (max-width: 1100px){
+  .tk-pe .tk-pe-call{ max-width:none; }
+}
+
+/* tablet: one column, numeral on the left of the title and text */
+@media (max-width: 900px){
+  .tk-pe .tk-pe-head{ margin-bottom:52px; }
+  .tk-pe .tk-pe-cards{ grid-template-columns:minmax(0,1fr); grid-template-rows:none; row-gap:16px; }
+  .tk-pe .tk-pe-card{ grid-row:auto; grid-template-rows:auto 1fr; grid-template-columns:auto minmax(0,1fr); column-gap:32px; padding:36px 32px 32px; }
+  .tk-pe .tk-pe-num{ grid-row:span 2; width:1.04em; font-size:80px; }   /* fixed column: 01 / 02 / 03 titles start on the same line */
+  .tk-pe .tk-pe-t{ margin-top:0; }
+  .tk-pe .tk-pe-p{ margin-top:18px; padding-top:18px; }
+  .tk-pe .tk-pe-call{ margin-top:80px; padding:68px 32px 44px; }
+  .tk-pe .tk-pe-call-p{ font-size:20px; }
+}
+
+/* phones: numeral on top, everything stacked */
+@media (max-width: 560px){
+  .tk-pe .tk-pe-head{ gap:20px; margin-bottom:44px; }
+  .tk-pe .tk-pe-lead{ text-wrap:pretty; }
+  .tk-pe .tk-pe-card{ grid-template-columns:auto minmax(0,1fr); grid-template-rows:none; column-gap:20px; align-items:end; padding:30px 24px 28px; }
+  .tk-pe .tk-pe-num{ grid-row:auto; font-size:60px; }
+  .tk-pe .tk-pe-t{ align-self:end; font-size:22px; }
+  .tk-pe .tk-pe-p{ grid-column:1 / -1; margin-top:22px; padding-top:20px; }
+  .tk-pe .tk-pe-call{ margin-top:72px; padding:60px 22px 36px; }
+  .tk-pe .tk-pe-call-p{ font-size:19px; line-height:1.5; }
+  .tk-pe .tk-pe-call-line{ margin-top:32px; }
+}
+@media (max-width: 400px){
+  .tk-pe .tk-pe-card{ padding:30px 20px 26px; }
+  .tk-pe .tk-pe-call{ padding:58px 18px 32px; }
+}
+</style>
+<!-- styles from sections/d-bryan-team.html -->
+<style>
+/* ======================= S6 bio: the portrait plate ======================= */
+.tk-bio .tk-bio-grid{ display:grid; grid-template-columns:repeat(12, minmax(0, 1fr)); column-gap:24px; align-items:center; }
+
+/* the plate: thin antique frame offset 16px from the photo, gold hairline + crown on the top edge, brighter corners */
+.tk-bio .tk-bio-plate{ grid-column:1 / span 5; position:relative; width:100%; max-width:476px; margin:0; padding:16px; }
+.tk-bio .tk-bio-plate::before{ content:""; position:absolute; inset:0; pointer-events:none; border:1px solid rgba(var(--tk-ant-rgb),.3); }
+.tk-bio .tk-bio-plate::after{ content:""; position:absolute; left:0; right:0; top:0; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, rgba(var(--tk-gold-rgb),0), rgba(var(--tk-gold-rgb),.85) 50%, rgba(var(--tk-gold-rgb),0)); }
+.tk-bio .tk-bio-corners{ position:absolute; inset:0; pointer-events:none; --c:rgba(var(--tk-ant-rgb),.95); --l:18px;
+  background:
+    linear-gradient(var(--c), var(--c)) left top / var(--l) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) left top / 1px var(--l) no-repeat,
+    linear-gradient(var(--c), var(--c)) right top / var(--l) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) right top / 1px var(--l) no-repeat,
+    linear-gradient(var(--c), var(--c)) left bottom / var(--l) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) left bottom / 1px var(--l) no-repeat,
+    linear-gradient(var(--c), var(--c)) right bottom / var(--l) 1px no-repeat,
+    linear-gradient(var(--c), var(--c)) right bottom / 1px var(--l) no-repeat; }
+.tk-bio .tk-medal{ z-index:3; }
+
+/* the photo, graded into the dark-gold world: quieter flag, natural face, dark fall-off at the edges and the bottom */
+.tk-bio .tk-bio-photo{ position:relative; overflow:hidden; aspect-ratio:1 / 1; background:#0b0b0a;
+  box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 40px 90px -40px rgba(0,0,0,.95), 0 30px 80px -50px rgba(var(--tk-gold-rgb),.25); }
+.tk-bio .tk-bio-photo img{ display:block; width:100%; height:100%; max-width:none; object-fit:cover;
+  filter:saturate(.48) sepia(.18) contrast(1.06) brightness(.9); }
+.tk-bio .tk-bio-photo::before{ content:""; position:absolute; inset:0; z-index:1; pointer-events:none; mix-blend-mode:multiply;
+  background:radial-gradient(78% 78% at 50% 42%, #fff 45%, #8a7558 80%, #3a3022 100%); }
+.tk-bio .tk-bio-photo::after{ content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:
+    var(--tk-grain),
+    linear-gradient(180deg, rgba(8,8,7,.28) 0%, rgba(8,8,7,0) 22%, rgba(8,8,7,0) 56%, rgba(8,8,7,.82) 100%); }
+
+/* the text side */
+.tk-bio .tk-bio-text{ grid-column:7 / -1; }
+.tk-bio .tk-bio-text .tk-cap{ margin-bottom:24px; }
+.tk-bio .tk-bio-text .tk-h{ margin-bottom:32px; }
+.tk-bio .tk-bio-text .tk-h .tk-acc{ display:block; }
+.tk-bio .tk-bio-copy{ max-width:560px; }
+.tk-bio .tk-bio-copy .tk-bio-strong{ color:#fff; font-weight:600; }
+
+/* ======================= S7 team ======================= */
+.tk-team .tk-team-head{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+.tk-team .tk-team-head .tk-cap{ margin-bottom:24px; }
+.tk-team .tk-team-head .tk-h{ max-width:820px; margin-bottom:24px; }
+.tk-team .tk-team-head .tk-lead{ text-wrap:balance; }
+
+/* the six scars: an open ledger on antique hairlines; the row rules fade out at the outer ends */
+.tk-team .tk-team-scars{ --ln:rgba(var(--tk-ant-rgb),.22); --ln0:rgba(var(--tk-ant-rgb),0);
+  margin-top:72px; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.tk-team .tk-team-scars li{ position:relative; display:flex; align-items:flex-start; gap:16px; padding:36px 32px 40px;
+  border-top:.5px solid var(--ln); border-image:linear-gradient(90deg, var(--ln), var(--ln)) 1; }
+.tk-team .tk-team-scars li::before{ content:""; position:absolute; left:0; top:0; bottom:0; border-left:.5px solid var(--ln); }
+.tk-team .tk-team-scars .tk-x{ margin-top:9px; }
+.tk-team .tk-team-scars .tk-h{ display:block; max-width:13em; }
+.tk-team .tk-team-last .tk-x{ --tk-ant-rgb:var(--tk-gold-rgb); }
+/* 3 columns */
+.tk-team .tk-team-scars li:nth-child(n+4){ border-bottom:.5px solid var(--ln); }
+.tk-team .tk-team-scars li:nth-child(3n+1){ padding-left:0; border-image:linear-gradient(90deg, var(--ln0), var(--ln) 70%) 1; }
+.tk-team .tk-team-scars li:nth-child(3n+1)::before{ content:none; }
+.tk-team .tk-team-scars li:nth-child(3n){ padding-right:0; border-image:linear-gradient(90deg, var(--ln) 30%, var(--ln0)) 1; }
+
+/* the story (open) and the founders (card), on the same 5 / 6 grid as the bio above */
+.tk-team .tk-team-split{ margin-top:96px; display:grid; grid-template-columns:repeat(12, minmax(0, 1fr)); column-gap:24px; align-items:center; }
+.tk-team .tk-team-story{ grid-column:1 / span 5; }
+.tk-team .tk-team-story .tk-h{ margin-bottom:24px; }
+.tk-team .tk-team-card{ grid-column:7 / -1; padding:40px; }
+.tk-team .tk-team-card .tk-h{ margin-bottom:20px; }
+.tk-team .tk-team-card .tk-rule{ margin:24px 0; }
+.tk-team .tk-team-card .tk-team-strong{ color:#fff; font-weight:600; }
+
+/* ======================= tablet ======================= */
+@media (max-width: 1100px){
+  .tk-bio .tk-bio-grid, .tk-team .tk-team-split{ column-gap:48px; }
+  .tk-bio .tk-bio-plate{ grid-column:1 / span 6; }
+  .tk-team .tk-team-story{ grid-column:1 / span 6; }
+}
+@media (max-width: 900px){
+  .tk-bio .tk-bio-grid{ grid-template-columns:minmax(0, 1fr); row-gap:56px; }
+  .tk-bio .tk-bio-plate{ grid-column:1; justify-self:center; max-width:352px; }
+  .tk-bio .tk-bio-text{ grid-column:1; justify-self:center; width:100%; max-width:560px; }
+  .tk-bio .tk-bio-text .tk-h{ margin-bottom:24px; }
+
+  /* scars: 2 columns */
+  .tk-team .tk-team-scars{ margin-top:56px; grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .tk-team .tk-team-scars li:nth-child(n){ padding:28px 24px 32px; border-bottom:0; border-image:linear-gradient(90deg, var(--ln), var(--ln)) 1; }
+  .tk-team .tk-team-scars li:nth-child(n)::before{ content:""; }
+  .tk-team .tk-team-scars li:nth-child(n+5){ border-bottom:.5px solid var(--ln); }
+  .tk-team .tk-team-scars li:nth-child(2n+1){ padding-left:0; border-image:linear-gradient(90deg, var(--ln0), var(--ln) 70%) 1; }
+  .tk-team .tk-team-scars li:nth-child(2n+1)::before{ content:none; }
+  .tk-team .tk-team-scars li:nth-child(2n){ padding-right:0; border-image:linear-gradient(90deg, var(--ln) 30%, var(--ln0)) 1; }
+
+  .tk-team .tk-team-split{ margin-top:72px; grid-template-columns:minmax(0, 1fr); row-gap:48px; }
+  .tk-team .tk-team-story, .tk-team .tk-team-card{ grid-column:1; }
+  .tk-team .tk-team-story{ max-width:600px; }
+  .tk-team .tk-team-card{ padding:32px 24px; }
+}
+/* phones: the scars become one ruled column (two columns would break the long ones into four lines) */
+@media (max-width: 480px){
+  .tk-team .tk-team-scars{ margin-top:48px; grid-template-columns:minmax(0, 1fr); }
+  .tk-team .tk-team-scars li:nth-child(n){ gap:14px; padding:18px 0 19px; border-bottom:0;
+    border-image:linear-gradient(90deg, var(--ln0), var(--ln) 18%, var(--ln) 82%, var(--ln0)) 1; }
+  .tk-team .tk-team-scars li:nth-child(n)::before{ content:none; }
+  .tk-team .tk-team-scars li:last-child{ border-bottom:.5px solid var(--ln); }
+  .tk-team .tk-team-scars .tk-h--s{ font-size:20px; line-height:1.15; letter-spacing:.04em; max-width:none; }
+  .tk-team .tk-team-scars .tk-x{ margin-top:6px; }
+}
+@media (max-width: 400px){
+  .tk-bio .tk-bio-plate{ padding:14px; }
+  .tk-team .tk-team-card{ padding:30px 20px; }
+}
+</style>
+<!-- styles from sections/e-wayout.html -->
+<style>
+/* ===================== S9 · the way out: name reveal + five-move rail ===================== */
+.tk-way .tk-way-head{ display:grid; justify-items:center; text-align:center; }
+.tk-way .tk-way-name{ --fit-w:880px; margin-top:28px; }
+.tk-way .tk-way-sub{ margin-top:32px; max-width:600px; text-wrap:balance; }
+
+/* the rail: five equal columns, one hairline running node to node, brightening toward MONEY */
+.tk-way .tk-way-rail{
+  --node-y:8px;                                   /* vertical centre of every node */
+  display:grid; grid-template-columns:repeat(5, minmax(0, 1fr));
+  max-width:1120px; margin:96px auto 0;
+}
+.tk-way .tk-way-step{
+  position:relative; display:flex; flex-direction:column; align-items:center; text-align:center;
+  padding:calc(var(--node-y) * 2 + 32px) 18px 0;
+  /* line colour at this node (--c) and at the next one (--cn); node outline (--n) */
+  --c:rgba(var(--tk-ant-rgb),.32); --cn:rgba(var(--tk-ant-rgb),.5); --n:rgba(var(--tk-ant-rgb),.75);
+}
+.tk-way .tk-way-step:nth-child(2){ --c:rgba(var(--tk-ant-rgb),.5);  --cn:rgba(var(--tk-ant-rgb),.72); --n:rgba(var(--tk-ant-rgb),.95); }
+.tk-way .tk-way-step:nth-child(3){ --c:rgba(var(--tk-ant-rgb),.72); --cn:rgba(var(--tk-gold-rgb),.62); --n:rgba(var(--tk-gold-rgb),.75); }
+.tk-way .tk-way-step:nth-child(4){ --c:rgba(var(--tk-gold-rgb),.62); --cn:rgba(var(--tk-gold-rgb),.95); --n:var(--tk-gold); }
+.tk-way .tk-way-step:nth-child(5){ --c:rgba(var(--tk-gold-rgb),.95); --n:var(--tk-gold); }
+
+/* segment from this node to the next */
+.tk-way .tk-way-step:not(:last-child)::after{
+  content:""; position:absolute; top:calc(var(--node-y) - .5px); left:50%; width:100%; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, var(--c), var(--cn));
+}
+/* lead-in: the path arrives from nowhere into BASE */
+.tk-way .tk-way-step:first-child::before{
+  content:""; position:absolute; top:calc(var(--node-y) - .5px); left:0; width:50%; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, rgba(var(--tk-ant-rgb),0), var(--c));
+}
+
+/* the node: the site's diamond, dark inside so the line stops at its edge */
+.tk-way .tk-way-node{
+  --s:12px;
+  position:absolute; z-index:1; left:50%; top:var(--node-y); width:var(--s); height:var(--s); margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border:1px solid var(--n); background:#0d0c09; transform:rotate(45deg);
+}
+.tk-way .tk-way-step:last-child .tk-way-node{
+  --s:15px; background:var(--tk-gold); border-color:var(--tk-gold);
+  box-shadow:0 0 0 5px rgba(var(--tk-gold-rgb),.1), 0 0 26px rgba(var(--tk-gold-rgb),.55);
+}
+
+.tk-way .tk-way-step .tk-idx{ display:block; }
+.tk-way .tk-way-step h3{ margin-top:14px; }
+.tk-way .tk-way-step p{ margin-top:12px; max-width:200px; font-size:15px; line-height:1.6; color:var(--tk-dim); text-wrap:balance; }
+
+@media (max-width: 1100px){
+  .tk-way .tk-way-step{ padding-left:12px; padding-right:12px; }
+}
+/* tablet / phone: the rail turns vertical, nodes on the left, text to the right */
+@media (max-width: 900px){
+  .tk-way .tk-way-name{ --fit-w:620px; }
+}
+@media (max-width: 860px){
+  .tk-way .tk-way-sub{ margin-top:24px; }
+  .tk-way .tk-way-rail{ grid-template-columns:1fr; max-width:460px; margin-top:64px; }
+  .tk-way .tk-way-step{ align-items:flex-start; text-align:left; padding:0 0 40px 48px; }
+  .tk-way .tk-way-step:last-child{ padding-bottom:0; }
+  .tk-way .tk-way-node{ left:12px; top:var(--node-y); }
+  .tk-way .tk-way-step:not(:last-child)::after{
+    top:var(--node-y); bottom:calc(var(--node-y) * -1); left:11.5px; width:1px; height:auto;
+    background:linear-gradient(180deg, var(--c), var(--cn));
+  }
+  .tk-way .tk-way-step:first-child::before{
+    top:-44px; left:11.5px; width:1px; height:calc(44px + var(--node-y));
+    background:linear-gradient(180deg, rgba(var(--tk-ant-rgb),0), var(--c));
+  }
+  .tk-way .tk-way-step .tk-idx{ line-height:calc(var(--node-y) * 2); }
+  .tk-way .tk-way-step h3{ margin-top:10px; }
+  .tk-way .tk-way-step p{ margin-top:8px; max-width:34ch; text-wrap:pretty; }
+}
+@media (max-width: 400px){
+  .tk-way .tk-way-step{ padding-left:40px; }
+  .tk-way .tk-way-node{ left:8px; }
+  .tk-way .tk-way-step:not(:last-child)::after, .tk-way .tk-way-step:first-child::before{ left:7.5px; }
+}
+
+/* ===================== S10 · picture it: a quiet story in a narrow column ===================== */
+.tk-pic .tk-pic-col{ max-width:640px; }
+.tk-pic .tk-pic-title{ text-wrap:balance; }
+.tk-pic .tk-pic-story{ position:relative; margin-top:40px; }
+/* thin gold thread down the left of the story, fading at both ends */
+.tk-pic .tk-pic-story::before{
+  content:""; position:absolute; left:-48px; top:6px; bottom:6px; width:1px; pointer-events:none;
+  background:linear-gradient(180deg, rgba(var(--tk-ant-rgb),0), rgba(var(--tk-ant-rgb),.7) 22%, rgba(var(--tk-gold-rgb),.75) 78%, rgba(var(--tk-gold-rgb),0));
+}
+.tk-pic .tk-pic-story p{ font-size:19px; line-height:1.75; color:rgba(255,255,255,.82); text-wrap:pretty; }
+.tk-pic .tk-pic-story p + p{ margin-top:1.1em; }
+.tk-pic .tk-pic-story .tk-pic-last{ margin-top:48px; padding-top:32px; position:relative; font-size:clamp(21px, 1.75vw, 25px); line-height:1.45; letter-spacing:-.012em; color:#fff; text-wrap:balance; }
+.tk-pic .tk-pic-last::before{
+  content:""; position:absolute; left:0; top:0; width:44px; height:1px; background:var(--tk-gold);
+}
+.tk-pic .tk-pic-last strong{ font-weight:700; color:#fff; }
+
+@media (max-width: 860px){
+  .tk-pic .tk-pic-col{ max-width:600px; }
+  .tk-pic .tk-pic-story{ margin-top:32px; padding-left:28px; }
+  .tk-pic .tk-pic-story::before{ left:0; }
+}
+@media (max-width: 400px){
+  .tk-pic .tk-pic-story{ padding-left:22px; }
+  .tk-pic .tk-pic-story p{ font-size:17.5px; line-height:1.72; }
+  .tk-pic .tk-pic-story .tk-pic-last{ margin-top:40px; padding-top:28px; font-size:20px; }
+}
+</style>
+<!-- styles from sections/g-close.html -->
+<style>
+/* S12 fit: two open columns on hairlines, divided by a vertical rule */
+.tk-who{ padding-top:72px; }
+.tk-who .tk-who-grid{ display:grid; grid-template-columns:1fr 1fr; border-top:.5px solid var(--tk-line); border-bottom:.5px solid var(--tk-line); }
+.tk-who .tk-who-col{ padding:48px 56px 52px 0; }
+.tk-who .tk-who-col--no{ padding:48px 0 52px 56px; border-left:.5px solid var(--tk-line); }
+.tk-who .tk-h{ margin-bottom:26px; }
+.tk-who .tk-who-col--no .tk-h{ color:#cfd2d8; }
+.tk-who .tk-list li{ font-size:16px; }
+.tk-who .tk-list--ruled{ border-top:0; }
+.tk-who .tk-list--ruled li:last-child{ border-bottom:0; }
+@media (max-width: 860px){
+  .tk-who .tk-who-grid{ grid-template-columns:1fr; }
+  .tk-who .tk-who-col{ padding:40px 0 36px; }
+  .tk-who .tk-who-col--no{ padding:36px 0 40px; border-left:0; border-top:.5px solid var(--tk-line); }
+}
+
+/* S14 two paths: a fork, path one muted, path two the gold card, an OR node on the seam */
+.tk-paths .tk-paths-grid{ display:grid; grid-template-columns:1fr 64px 1fr; align-items:center; }
+.tk-paths .tk-path p{ font-size:clamp(16px, 1.25vw, 18px); line-height:1.7; text-wrap:pretty; }
+.tk-paths .tk-path .tk-h{ margin-bottom:18px; }
+.tk-paths .tk-path--one{ padding:40px 40px 40px 0; }
+.tk-paths .tk-path--one .tk-h{ color:#6b6f76; }
+.tk-paths .tk-path--one p{ color:var(--tk-mute); }
+.tk-paths .tk-path--two{ padding:52px 44px 46px; }
+.tk-paths .tk-path--two p{ color:#fff; }
+.tk-paths .tk-paths-or{ position:relative; align-self:stretch; display:grid; place-items:center; }
+.tk-paths .tk-paths-or::before{ content:""; position:absolute; top:8%; bottom:8%; left:50%; width:.5px; background:linear-gradient(180deg, transparent, var(--tk-line) 20%, var(--tk-line) 80%, transparent); }
+.tk-paths .tk-paths-or span{ position:relative; display:grid; place-items:center; width:44px; height:44px; transform:rotate(45deg); border:1px solid rgba(var(--tk-ant-rgb),.6); background:#0b0a08; }
+.tk-paths .tk-paths-or span{ font-family:var(--tk-mono); font-size:0; }
+.tk-paths .tk-paths-or span::after{ content:"OR"; transform:rotate(-45deg); font-family:var(--tk-mono); font-size:11px; letter-spacing:.12em; color:var(--tk-ant); }
+@media (max-width: 860px){
+  .tk-paths .tk-paths-grid{ grid-template-columns:1fr; }
+  .tk-paths .tk-path--one{ padding:0 0 8px; }
+  .tk-paths .tk-paths-or{ height:84px; }
+  .tk-paths .tk-paths-or::before{ top:0; bottom:0; }
+  .tk-paths .tk-path--two{ padding:40px 24px 34px; }
+  .tk-paths .tk-path--two .tk-medal{ display:none; }   /* the OR node already marks the seam on phones */
+}
+
+/* S15 final call: centered statement with a soft lamp, the solid button, Bryan's sign-off */
+.tk-final{ text-align:center; padding-top:120px; padding-bottom:120px; overflow-x:clip; }
+.tk-final::before{ content:""; position:absolute; left:50%; top:42%; width:min(900px, 100%); height:420px; transform:translate(-50%,-50%); pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 50%, rgba(var(--tk-gold-rgb),.09), rgba(var(--tk-gold-rgb),0) 70%); }
+.tk-final .tk-wrap{ position:relative; }
+.tk-final .tk-final-cta{ margin-top:44px; }
+.tk-final .tk-btn{ min-height:58px; padding:0 34px; font-size:18px; }
+.tk-final .tk-final-sign{ margin-top:34px; font-size:16px; color:var(--tk-dim); }
+.tk-final .tk-final-sign span{ display:block; margin-top:10px; font-family:var(--tk-display); font-size:22px; letter-spacing:.24em; padding-left:.24em; text-transform:uppercase; color:var(--tk-ant); }
+@media (max-width: 560px){
+  .tk-final{ padding-top:88px; padding-bottom:88px; }
+  .tk-final .tk-btn{ width:100%; font-size:16px; padding:14px 18px; line-height:1.15; }
+}
+</style>
+    <link rel="stylesheet" href="dfc.css?v=8a5305fe">
+<style>
+/* ===== hero das luvas (componentes/hero-luvas.html) ===== */
+
+/* Página de teste: só o fundo da página. O componente começa em .dfc-hero */
+html,body{margin:0;background:#0a0a0a}
+
+/* ================= DFC HERO (luvas 3D) ================= */
+.dfc-hero{
+  --dfc-gold:#F9C228;
+  --dfc-text:#ecebe7;
+  --dfc-mute:#9a9ea6;
+  --dfc-bg:#0a0a0a;
+  --dfc-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .92 0 0 0 0 .8 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  position:relative;min-height:100vh;min-height:100svh;overflow:hidden;overflow:clip;isolation:isolate;
+  display:flex;flex-direction:column;justify-content:center;padding:88px 0 96px;box-sizing:border-box;
+  background:radial-gradient(120% 80% at 50% 58%,#141312 0%,var(--dfc-bg) 62%);
+  color:var(--dfc-text);font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;touch-action:pan-y;
+}
+.dfc-hero *,.dfc-hero *::before,.dfc-hero *::after{box-sizing:border-box}
+.dfc-hero::before{content:"";position:absolute;inset:0;background:var(--dfc-grain);pointer-events:none;z-index:0}
+.dfc-hero a{color:inherit;text-decoration:none}
+
+.dfc-hero__nav{position:absolute;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;padding:16px;z-index:5}
+.dfc-hero__logo{display:inline-flex;align-items:center;color:#fff}
+.dfc-hero__logo svg{display:block;height:30px;width:auto}
+
+.dfc-hero__wall{position:relative;z-index:1;margin:0;font-family:"Anton",Impact,"Arial Narrow",sans-serif;font-weight:400;
+  font-size:min(15vw,230px);font-size:min(15vw,24svh,230px);line-height:.88;letter-spacing:.004em;text-transform:uppercase;white-space:nowrap;
+  user-select:none;-webkit-user-select:none;color:var(--dfc-text)}
+/* linhas 2 e 3 abrem um vão no meio, onde ficam as luvas */
+.dfc-hero__wall>span{display:flex;justify-content:space-between;padding:0 16px}
+.dfc-hero__wall .l1{justify-content:flex-start;gap:.234em}
+
+.dfc-hero__stage{position:absolute;left:54%;top:57%;z-index:3;width:min(34vw,540px);width:min(34vw,55svh,540px);aspect-ratio:4/5;
+  transform:translate(-50%,-50%);pointer-events:none}
+.dfc-hero__stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;will-change:transform;opacity:0;transition:opacity .7s ease}
+.dfc-hero__stage.is-on canvas{opacity:1}
+
+.dfc-hero__caption{position:absolute;right:16px;bottom:24px;margin:0;width:min(270px,36vw);font-size:12px;line-height:1.56;
+  letter-spacing:.02em;text-transform:uppercase;color:var(--dfc-text);z-index:4}
+.dfc-hero__caption i{font-style:normal;color:var(--dfc-gold)}
+.dfc-hero__cta{position:absolute;left:16px;bottom:24px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  z-index:4;padding-bottom:3px;border-bottom:1px solid var(--dfc-gold);transition:color .2s}
+.dfc-hero__cta:hover,.dfc-hero__cta:focus-visible{color:var(--dfc-gold)}
+
+/* celular e tablet em pé: texto em cinco linhas em cima, luvas logo abaixo */
+@media (max-width:760px),(orientation:portrait) and (max-width:1100px){
+  .dfc-hero{--fs:min(23vw,10vh);--sw:min(78vw,40vh);
+    padding:72px 0 120px;justify-content:flex-start;
+    /* altura mínima: texto (5 linhas x .9) + luvas + legenda e CTA */
+    min-height:max(100vh,calc(72px + 4.5 * var(--fs) + .8 * var(--sw) + 100px))}
+  @supports (height:1svh){.dfc-hero{--fs:min(23vw,10svh);--sw:min(78vw,40svh);min-height:max(100svh,calc(72px + 4.5 * var(--fs) + .8 * var(--sw) + 100px))}}
+  .dfc-hero__wall{font-size:var(--fs);line-height:.9}
+  .dfc-hero__wall>span{display:block;padding:0}
+  .dfc-hero__wall .l1{padding-left:16px}
+  .dfc-hero__wall .l2>span,.dfc-hero__wall .l3>span{display:block}
+  .dfc-hero__wall .l2>span:first-child,.dfc-hero__wall .l3>span:first-child{text-align:right;padding-right:16px}
+  .dfc-hero__wall .l2>span:last-child,.dfc-hero__wall .l3>span:last-child{padding-left:16px}
+  /* as luvas começam logo abaixo da última linha, encostando um pouco nela */
+  .dfc-hero__stage{width:var(--sw);left:50%;top:calc(72px + 4.5 * var(--fs) - .26 * var(--sw));transform:translate(-50%,0)}
+  .dfc-hero__caption{left:16px;right:16px;bottom:58px;width:auto;font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){.dfc-hero__cta,.dfc-hero__stage canvas{transition:none}}
+
+</style>
+</head>
+<body class="antialiased">
+
+    <!-- CABEÇALHO (vidro) + LOGO QUE VOA (a abertura da TMS) -->
+    <header class="tms-header">
+        <nav aria-label="Principal">
+            <a href="#top">Início</a>
+            <a href="#lutas">Lutas</a>
+            <a href="#precos">Preços</a>
+        </nav>
+    </header>
+    <div class="tms-brand" id="tms-brand">
+        <a href="#top" aria-label="DFC, voltar ao início">
+            <div class="box">
+                <img class="lyr icone" src="media/dfc-logo-icone.webp" alt="DFC Dominium Fighter Championship">
+                <span class="lyr shine" aria-hidden="true"></span>
+                <img class="lyr sigla" src="media/dfc-logo-sigla.webp" alt="" aria-hidden="true">
+                <img class="lyr nome" src="media/dfc-logo-nome.webp" alt="" aria-hidden="true">
+            </div>
+        </a>
+    </div>
+    <div id="top" class="tms-hero-spacer"></div>
+
+<section class="dfc-hero" id="hero">
+  
+  <h1 class="dfc-hero__wall" aria-label="As fotos e os vídeos de cada luta">
+    <span class="l1"><span>AS</span> <span>FOTOS</span></span>
+    <span class="l2"><span>E OS</span> <span>VÍDEOS</span></span>
+    <span class="l3"><span>DE CADA</span> <span>LUTA</span></span>
+  </h1>
+  <div class="dfc-hero__stage" aria-hidden="true"><canvas></canvas></div>
+  <p class="dfc-hero__caption">Dominium Fighter Championship <i>·</i> Cordeirópolis-SP <i>·</i> 31.10.2026 <i>·</i> 19 lutas</p>
+  <a class="dfc-hero__cta" href="#lutas">Ver as lutas ↓</a>
+</section>
+
+
+
+    <!-- AS LUTAS (o carrossel da biblioteca da TMS). Capas: ferramentas/capas.py -->
+    <section id="lutas" class="tms-lib">
+        <div class="tms-lib-head">
+            <div>
+                <h2>As lutas</h2>
+                <p>Toque na sua luta para ver as fotos, a luta completa e o highlight.</p>
+            </div>
+        </div>
+        <div class="tms-row-head">
+            <div class="row-title">Card preliminar <span>Lutas 1 a 10</span></div>
+            <div class="tms-lib-nav">
+                <button type="button" data-row="tms-row-1" data-dir="-1" aria-label="Anteriores">&#8592;</button>
+                <button type="button" data-row="tms-row-1" data-dir="1" aria-label="Próximas">&#8594;</button>
+            </div>
+        </div>
+        <div class="tms-row" id="tms-row-1"><div class="tms-item"><span class="tms-num" aria-hidden="true">1</span><a class="tms-cover dfc-cover" href="#luta-1" data-luta="1" aria-label="Luta 1: Arthur Salles contra Cristiano Costa"><img class="art" src="capas/luta-01.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 01</b><i>MMA Juvenil</i></span><span class="dfc-cap"><span class="a">Arthur Salles</span><span class="vs">vs</span><span class="b">Cristiano Costa</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">2</span><a class="tms-cover dfc-cover" href="#luta-2" data-luta="2" aria-label="Luta 2: Ismael Henrique contra Raphael Martins"><img class="art" src="capas/luta-02.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 02</b><i>K-1 Juvenil</i></span><span class="dfc-cap"><span class="a">Ismael Henrique</span><span class="vs">vs</span><span class="b">Raphael Martins</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">3</span><a class="tms-cover dfc-cover" href="#luta-3" data-luta="3" aria-label="Luta 3: Brayan Pereira contra Juan Pablo"><img class="art" src="capas/luta-03.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 03</b><i>K-1 Juvenil</i></span><span class="dfc-cap"><span class="a">Brayan Pereira</span><span class="vs">vs</span><span class="b">Juan Pablo</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">4</span><a class="tms-cover dfc-cover" href="#luta-4" data-luta="4" aria-label="Luta 4: Kevin William contra Otávio Chaminha"><img class="art" src="capas/luta-04.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 04</b><i>MMA (Super Luta)</i></span><span class="dfc-cap"><span class="a">Kevin William</span><span class="vs">vs</span><span class="b">Otávio Chaminha</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">5</span><a class="tms-cover dfc-cover" href="#luta-5" data-luta="5" aria-label="Luta 5: Pietro Rossi contra Tiago Penzo"><img class="art" src="capas/luta-05.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 05</b><i>Jiu-Jitsu</i></span><span class="dfc-cap"><span class="a">Pietro Rossi</span><span class="vs">vs</span><span class="b">Tiago Penzo</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">6</span><a class="tms-cover dfc-cover" href="#luta-6" data-luta="6" aria-label="Luta 6: Ysabely Cristini contra Maisa Dias"><img class="art" src="capas/luta-06.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 06</b><i>MMA Juvenil</i></span><span class="dfc-cap"><span class="a">Ysabely Cristini</span><span class="vs">vs</span><span class="b">Maisa Dias</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">7</span><a class="tms-cover dfc-cover" href="#luta-7" data-luta="7" aria-label="Luta 7: Mithel Arnald contra Cleilton Cruz"><img class="art" src="capas/luta-07.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 07</b><i>K-1</i></span><span class="dfc-cap"><span class="a">Mithel Arnald</span><span class="vs">vs</span><span class="b">Cleilton Cruz</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">8</span><a class="tms-cover dfc-cover" href="#luta-8" data-luta="8" aria-label="Luta 8: Otávio Mattei contra Lucas Santos"><img class="art" src="capas/luta-08.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 08</b><i>MMA Juvenil</i></span><span class="dfc-cap"><span class="a">Otávio Mattei</span><span class="vs">vs</span><span class="b">Lucas Santos</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">9</span><a class="tms-cover dfc-cover" href="#luta-9" data-luta="9" aria-label="Luta 9: Samuel Felipe contra João Souza"><img class="art" src="capas/luta-09.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 09</b><i>K-1</i></span><span class="dfc-cap"><span class="a">Samuel Felipe</span><span class="vs">vs</span><span class="b">João Souza</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">10</span><a class="tms-cover dfc-cover" href="#luta-10" data-luta="10" aria-label="Luta 10: Berg Silva contra Erick Aguiar"><img class="art" src="capas/luta-10.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 10</b><i>MMA (Super Luta)</i></span><span class="dfc-cap"><span class="a">Berg Silva</span><span class="vs">vs</span><span class="b">Erick Aguiar</span></span></a></div></div>
+        <div class="tms-row-head">
+            <div class="row-title">Card principal <span>Lutas 11 a 19</span></div>
+            <div class="tms-lib-nav">
+                <button type="button" data-row="tms-row-2" data-dir="-1" aria-label="Anteriores">&#8592;</button>
+                <button type="button" data-row="tms-row-2" data-dir="1" aria-label="Próximas">&#8594;</button>
+            </div>
+        </div>
+        <div class="tms-row" id="tms-row-2"><div class="tms-item"><span class="tms-num" aria-hidden="true">11</span><a class="tms-cover dfc-cover" href="#luta-11" data-luta="11" aria-label="Luta 11: Luiz Kong contra Arthur Tarzan"><img class="art" src="capas/luta-11.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 11</b><i>MMA Profissional</i></span><span class="dfc-cap"><span class="a">Luiz Kong</span><span class="vs">vs</span><span class="b">Arthur Tarzan</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">12</span><a class="tms-cover dfc-cover" href="#luta-12" data-luta="12" aria-label="Luta 12: Islan Canato contra Erick Fonseca"><img class="art" src="capas/luta-12.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 12</b><i>K-1</i></span><span class="dfc-cap"><span class="a">Islan Canato</span><span class="vs">vs</span><span class="b">Erick Fonseca</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">13</span><a class="tms-cover dfc-cover" href="#luta-13" data-luta="13" aria-label="Luta 13: Wilson Barbosa contra Rafael Nunes"><img class="art" src="capas/luta-13.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 13</b><i>Boxe (Super Luta)</i></span><span class="dfc-cap"><span class="a">Wilson Barbosa</span><span class="vs">vs</span><span class="b">Rafael Nunes</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">14</span><a class="tms-cover dfc-cover" href="#luta-14" data-luta="14" aria-label="Luta 14: Jeferson Reis contra Eduardo Duzão"><img class="art" src="capas/luta-14.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 14</b><i>K-1</i></span><span class="dfc-belt">Cinturão Nacional K-1</span><span class="dfc-cap"><span class="a">Jeferson Reis</span><span class="vs">vs</span><span class="b">Eduardo Duzão</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">15</span><a class="tms-cover dfc-cover" href="#luta-15" data-luta="15" aria-label="Luta 15: Rychard Silva contra Rian Moreira"><img class="art" src="capas/luta-15.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 15</b><i>MMA</i></span><span class="dfc-cap"><span class="a">Rychard Silva</span><span class="vs">vs</span><span class="b">Rian Moreira</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">16</span><a class="tms-cover dfc-cover" href="#luta-16" data-luta="16" aria-label="Luta 16: Julião Xavier contra Marcos Germano"><img class="art" src="capas/luta-16.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 16</b><i>MMA</i></span><span class="dfc-belt">Cinturão de MMA</span><span class="dfc-cap"><span class="a">Julião Xavier</span><span class="vs">vs</span><span class="b">Marcos Germano</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">17</span><a class="tms-cover dfc-cover" href="#luta-17" data-luta="17" aria-label="Luta 17: Zeus Oliveira contra Erick Sebastian"><img class="art" src="capas/luta-17.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 17</b><i>MMA</i></span><span class="dfc-belt">Cinturão Casca Grossa</span><span class="dfc-cap"><span class="a">Zeus Oliveira</span><span class="vs">vs</span><span class="b">Erick Sebastian</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">18</span><a class="tms-cover dfc-cover" href="#luta-18" data-luta="18" aria-label="Luta 18: Ruth Ravena contra Jeane Ruas"><img class="art" src="capas/luta-18.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 18</b><i>MMA Profissional (co-main event)</i></span><span class="dfc-cap"><span class="a">Ruth Ravena</span><span class="vs">vs</span><span class="b">Jeane Ruas</span></span></a></div><div class="tms-item"><span class="tms-num" aria-hidden="true">19</span><a class="tms-cover dfc-cover" href="#luta-19" data-luta="19" aria-label="Luta 19: Eyshela Santos contra Thaís Faria"><img class="art" src="capas/luta-19.webp" alt="" width="600" height="900" loading="lazy" decoding="async"><span class="dfc-tag"><b>Luta 19</b><i>K-1 (luta principal)</i></span><span class="dfc-cap"><span class="a">Eyshela Santos</span><span class="vs">vs</span><span class="b">Thaís Faria</span></span></a></div></div>
+    </section>
+
+    <!-- PREÇOS (o bloco de preços da TMS, com o plano único da luta) -->
+    <section id="precos" class="tms-pr dfc-pr" aria-labelledby="tms-pr-title">
+<style>
+.tms-pr{
+  --tms-pr-gold:#F9C228; --tms-pr-gold-rgb:249,194,40;
+  --tms-pr-ant:#C8A05E; --tms-pr-ant-rgb:200,160,94;
+  --tms-pr-text:#e9e9ec; --tms-pr-dim:#a2a6ae; --tms-pr-line:#23252a;
+  /* worn-paper grain for the cards, same feel as the background photo */
+  --tms-pr-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .92 0 0 0 0 .8 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  position:relative; z-index:10; padding:104px 24px 112px;
+  color:var(--tms-pr-text); font-family:'Inter',system-ui,-apple-system,sans-serif; line-height:1.5;
+}
+.tms-pr *, .tms-pr *::before, .tms-pr *::after{ box-sizing:border-box; }
+.tms-pr p, .tms-pr h2, .tms-pr h3, .tms-pr ul, .tms-pr dl, .tms-pr dt, .tms-pr dd{ margin:0; padding:0; }
+.tms-pr a{ text-decoration:none; -webkit-tap-highlight-color:transparent; }
+.tms-pr svg{ display:block; }
+.tms-pr .tms-pr-sr{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+.tms-pr .tms-pr-wrap{ max-width:1200px; margin:0 auto; }
+
+/* ---------- head: caption between hairlines, two Anton lines of equal width (like the hero) ---------- */
+.tms-pr .tms-pr-head{ display:grid; justify-items:center; text-align:center; gap:20px; margin-bottom:64px; }
+.tms-pr .tms-pr-cap{ display:inline-flex; align-items:center; gap:14px; font-size:11.5px; font-weight:700; line-height:1; letter-spacing:.28em; text-transform:uppercase; color:var(--tms-pr-ant); }
+.tms-pr .tms-pr-cap i{ display:block; flex:0 0 auto; width:40px; height:1px; background:linear-gradient(90deg, rgba(var(--tms-pr-ant-rgb),0), rgba(var(--tms-pr-ant-rgb),.85)); }
+.tms-pr .tms-pr-cap i:last-child{ transform:scaleX(-1); margin-left:-.28em; }
+/* both lines fill the same width: font-size = width / (line width in em, measured in Anton + 1%) */
+.tms-pr .tms-pr-h{ container-type:inline-size; width:min(100%, 460px); font-family:'Anton','Inter',sans-serif; font-weight:400; text-transform:uppercase; line-height:1; letter-spacing:.005em; color:#fff; }
+.tms-pr .tms-pr-h span{ display:block; white-space:nowrap; }
+.tms-pr .tms-pr-h .l1{ font-size:72px; font-size:calc(100cqw / 6.36); }
+.tms-pr .tms-pr-h .l2{ font-size:62px; font-size:calc(100cqw / 7.365); margin-top:.1em; color:var(--tms-pr-gold); }
+.tms-pr .tms-pr-sub{ max-width:640px; text-wrap:balance; font-size:16.5px; line-height:1.6; color:rgba(255,255,255,.74); }
+
+/* ---------- plans: three monthly cards, then the two one-time cards centered under them ---------- */
+.tms-pr .tms-pr-plans{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:20px; align-items:stretch; }
+.tms-pr .tms-pr-plans--once{ grid-template-columns:repeat(2, minmax(0,1fr)); max-width:1040px; margin:72px auto 0; }
+.tms-pr .tms-pr-plan, .tms-pr .tms-pr-math{
+  position:relative;
+  border:1px solid rgba(255,255,255,.1);
+  background:var(--tms-pr-grain), linear-gradient(180deg, rgba(24,21,14,.82) 0%, rgba(9,9,8,.88) 100%);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  box-shadow:0 30px 70px -36px rgba(0,0,0,.9);
+  transition:border-color .3s ease, box-shadow .3s ease;
+}
+.tms-pr .tms-pr-plan{ display:flex; flex-direction:column; padding:40px 30px 30px; }
+.tms-pr .tms-pr-plan::before, .tms-pr .tms-pr-math::before{ /* the gold hairline on the top edge, fading out at the corners */
+  content:""; position:absolute; left:-1px; right:-1px; top:-1px; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, rgba(var(--tms-pr-ant-rgb),0), rgba(var(--tms-pr-ant-rgb),.8) 50%, rgba(var(--tms-pr-ant-rgb),0));
+}
+.tms-pr .tms-pr-plan:hover{ border-color:rgba(var(--tms-pr-ant-rgb),.4); }
+
+/* featured: gold edge, a faint lamp from the top and the crown medallion (same as the footer's) */
+.tms-pr .tms-pr-plan--vip{
+  border-color:rgba(var(--tms-pr-gold-rgb),.55);
+  background:var(--tms-pr-grain), radial-gradient(70% 180px at 50% 0%, rgba(var(--tms-pr-gold-rgb),.11), rgba(var(--tms-pr-gold-rgb),0)),
+             linear-gradient(180deg, rgba(28,24,13,.86) 0%, rgba(9,9,8,.9) 100%);
+  box-shadow:0 0 0 1px rgba(var(--tms-pr-gold-rgb),.1), 0 40px 90px -42px rgba(var(--tms-pr-gold-rgb),.32);
+}
+.tms-pr .tms-pr-plan--vip::before{ height:2px; top:-2px; background:linear-gradient(90deg, rgba(var(--tms-pr-gold-rgb),0), var(--tms-pr-gold) 50%, rgba(var(--tms-pr-gold-rgb),0)); }
+.tms-pr .tms-pr-plan--vip:hover{ border-color:rgba(var(--tms-pr-gold-rgb),.8); }
+.tms-pr .tms-pr-medal{
+  position:absolute; z-index:1; left:50%; top:0; width:44px; height:44px; margin:-23px 0 0 -22px;
+  display:grid; place-items:center; border-radius:50%; color:var(--tms-pr-ant);
+  border:1px solid var(--tms-pr-gold); background:#0d0c09;
+  box-shadow:0 8px 24px rgba(0,0,0,.55), 0 0 22px rgba(var(--tms-pr-gold-rgb),.2);
+}
+.tms-pr .tms-pr-medal svg{ width:21px; height:auto; aspect-ratio:354/197; }
+
+.tms-pr .tms-pr-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.tms-pr .tms-pr-name{ font-family:'Anton','Inter',sans-serif; font-weight:400; font-size:26px; line-height:1.1; letter-spacing:.035em; text-transform:uppercase; color:#fff; }
+.tms-pr .tms-pr-badge{
+  flex:0 0 auto; padding:6px 8px 6px 10px; border:1px solid rgba(var(--tms-pr-ant-rgb),.55);
+  font-size:10.5px; font-weight:700; line-height:1; letter-spacing:.2em; text-transform:uppercase; color:var(--tms-pr-ant); white-space:nowrap;
+}
+.tms-pr .tms-pr-plan--vip .tms-pr-badge{ background:var(--tms-pr-gold); border-color:var(--tms-pr-gold); color:#0a0a0a; }
+
+.tms-pr .tms-pr-price{ display:flex; align-items:flex-end; gap:12px; min-height:76px; margin-top:28px; }
+.tms-pr .tms-pr-now{ font-family:'Anton','Inter',sans-serif; font-weight:400; font-size:76px; line-height:.86; letter-spacing:0; color:#fff; white-space:nowrap; }
+.tms-pr .tms-pr-cur{ display:inline-block; font-size:.42em; vertical-align:top; margin:.08em .06em 0 0; color:var(--tms-pr-ant); }
+.tms-pr .tms-pr-per{ display:grid; gap:3px; padding-bottom:3px; font-size:11px; font-weight:700; line-height:1.2; letter-spacing:.18em; text-transform:uppercase; color:var(--tms-pr-dim); white-space:nowrap; }
+.tms-pr .tms-pr-per b{ font-weight:700; color:var(--tms-pr-ant); }
+
+.tms-pr .tms-pr-desc{ margin-top:20px; font-size:15px; line-height:1.6; color:rgba(255,255,255,.74); text-wrap:pretty; }
+.tms-pr .tms-pr-list{ list-style:none; display:grid; align-content:start; gap:12px; margin:24px 0 34px; padding-top:24px; border-top:1px solid rgba(255,255,255,.09); }
+.tms-pr .tms-pr-list li{ position:relative; padding-left:24px; font-size:15px; line-height:1.5; color:var(--tms-pr-text); text-wrap:pretty; }
+.tms-pr .tms-pr-list li::before{ /* the site's bullet: a small gold diamond */
+  content:""; position:absolute; left:2px; top:calc(.75em - 3.5px); width:7px; height:7px; border:1px solid var(--tms-pr-gold); transform:rotate(45deg);
+}
+.tms-pr .tms-pr-plan--vip .tms-pr-list li::before{ background:var(--tms-pr-gold); }
+
+/* ---------- buttons ---------- */
+.tms-pr .tms-pr-btn{
+  margin-top:auto; display:flex; align-items:center; justify-content:center; gap:10px; min-height:54px; padding:0 18px;
+  font-family:'Anton','Inter',sans-serif; font-weight:400; font-size:17px; line-height:1; letter-spacing:.07em; text-transform:uppercase; text-align:center;
+  color:var(--tms-pr-gold); border:1px solid rgba(var(--tms-pr-gold-rgb),.6); background:rgba(var(--tms-pr-gold-rgb),.03);
+  transition:background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .25s ease;
+}
+.tms-pr .tms-pr-btn svg{ flex:0 0 auto; width:15px; height:15px; transition:transform .25s cubic-bezier(.2,.8,.2,1); }
+.tms-pr .tms-pr-btn:hover, .tms-pr .tms-pr-btn:focus-visible{ background-color:var(--tms-pr-gold); border-color:var(--tms-pr-gold); color:#0a0a0a; }
+.tms-pr .tms-pr-btn:hover svg, .tms-pr .tms-pr-btn:focus-visible svg{ transform:translateX(3px); }
+.tms-pr .tms-pr-btn:focus-visible{ outline:2px solid var(--tms-pr-gold); outline-offset:3px; }
+.tms-pr .tms-pr-btn--solid{ background-color:var(--tms-pr-gold); border-color:var(--tms-pr-gold); color:#0a0a0a; box-shadow:0 12px 30px -14px rgba(var(--tms-pr-gold-rgb),.6); }
+.tms-pr .tms-pr-btn--solid:hover, .tms-pr .tms-pr-btn--solid:focus-visible{ background-color:#ffd24a; border-color:#ffd24a; box-shadow:0 16px 38px -14px rgba(var(--tms-pr-gold-rgb),.8); }
+
+/* ---------- the Trench Made math: a ledger on hairlines, the total struck out, the price as the last word ---------- */
+.tms-pr .tms-pr-math{ max-width:860px; margin:72px auto 0; padding:44px 52px 40px; }
+.tms-pr .tms-pr-math-t{ font-family:'Anton','Inter',sans-serif; font-weight:400; font-size:34px; line-height:1.05; letter-spacing:.03em; text-transform:uppercase; color:var(--tms-pr-gold); text-wrap:balance; }
+.tms-pr .tms-pr-ledger{ margin-top:24px; border-top:.5px solid var(--tms-pr-line); }
+.tms-pr .tms-pr-row{ display:flex; align-items:baseline; justify-content:space-between; gap:24px; padding:15px 0; border-bottom:.5px solid var(--tms-pr-line); }
+.tms-pr .tms-pr-row dt{ font-size:15.5px; line-height:1.5; color:rgba(255,255,255,.74); text-wrap:pretty; }
+.tms-pr .tms-pr-row dd{ flex:0 0 auto; font-family:'Anton','Inter',sans-serif; font-weight:400; font-size:24px; line-height:1; letter-spacing:.02em; color:var(--tms-pr-text); white-space:nowrap; }
+.tms-pr .tms-pr-row--total{ border-top:.5px solid rgba(255,255,255,.22); margin-top:-.5px; }
+.tms-pr .tms-pr-row--total dt{ font-weight:700; color:#fff; }
+.tms-pr .tms-pr-row--total dd{ color:var(--tms-pr-dim); }
+.tms-pr .tms-pr-row--total s{ text-decoration:line-through; text-decoration-thickness:1.5px; text-decoration-color:rgba(var(--tms-pr-ant-rgb),.9); }
+.tms-pr .tms-pr-row--all{ align-items:baseline; padding:26px 0 24px; }
+.tms-pr .tms-pr-row--all dt{ font-family:'Anton','Inter',sans-serif; font-weight:400; font-size:28px; line-height:1; letter-spacing:.04em; text-transform:uppercase; color:#fff; }
+.tms-pr .tms-pr-row--all dd{ font-size:88px; line-height:.84; letter-spacing:0; color:var(--tms-pr-gold); text-shadow:0 0 40px rgba(var(--tms-pr-gold-rgb),.18); }
+.tms-pr .tms-pr-row--all .tms-pr-cur{ color:var(--tms-pr-ant); }
+.tms-pr .tms-pr-math-note{ max-width:620px; margin-top:22px; font-size:15px; line-height:1.65; color:var(--tms-pr-dim); text-wrap:pretty; }
+
+/* ---------- fine print ---------- */
+.tms-pr .tms-pr-fine{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 0; margin-top:36px; font-size:12.5px; line-height:1.6; letter-spacing:.02em; color:var(--tms-pr-dim); text-align:center; }
+.tms-pr .tms-pr-fine > span + span::before{ content:""; display:inline-block; width:5px; height:5px; margin:0 14px 0 16px; vertical-align:2px; border:1px solid rgba(var(--tms-pr-ant-rgb),.8); transform:rotate(45deg); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px){
+  .tms-pr .tms-pr-plan{ padding:40px 24px 24px; }
+  .tms-pr .tms-pr-name{ font-size:22px; letter-spacing:.03em; }
+  .tms-pr .tms-pr-now{ font-size:68px; }
+  .tms-pr .tms-pr-btn{ font-size:16px; letter-spacing:.06em; padding:0 14px; }
+}
+@media (max-width: 900px){
+  .tms-pr{ padding:84px 20px 92px; }
+  .tms-pr .tms-pr-head{ margin-bottom:52px; }
+  .tms-pr .tms-pr-plans, .tms-pr .tms-pr-plans--once{ grid-template-columns:1fr; gap:20px; max-width:560px; margin:0 auto; }
+  .tms-pr .tms-pr-plans--once{ margin-top:44px; }
+  .tms-pr .tms-pr-name{ font-size:26px; letter-spacing:.035em; }
+  .tms-pr .tms-pr-price{ min-height:0; }
+  .tms-pr .tms-pr-math{ max-width:560px; margin-top:44px; padding:36px 28px 32px; }
+  .tms-pr .tms-pr-math-t{ font-size:30px; }
+  .tms-pr .tms-pr-row--all dd{ font-size:72px; }
+}
+@media (max-width: 560px){
+  .tms-pr .tms-pr-cap{ letter-spacing:.2em; }
+  .tms-pr .tms-pr-cap i{ display:none; }          /* the long caption keeps one line on phones: no hairlines */
+  .tms-pr .tms-pr-fine-b{ flex-basis:100%; }      /* last line on its own row, no leading diamond */
+  .tms-pr .tms-pr-fine > .tms-pr-fine-b::before{ display:none; }
+  .tms-pr .tms-pr-row{ gap:16px; }
+  .tms-pr .tms-pr-row dt{ font-size:15px; }
+  .tms-pr .tms-pr-row dd{ font-size:22px; }
+  .tms-pr .tms-pr-row--all dt{ font-size:24px; }
+  .tms-pr .tms-pr-row--all dd{ font-size:64px; }
+}
+@media (max-width: 400px){
+  .tms-pr{ padding:72px 16px 80px; }
+  .tms-pr .tms-pr-plan{ padding:38px 20px 20px; }
+  .tms-pr .tms-pr-name{ font-size:24px; }
+  .tms-pr .tms-pr-now{ font-size:64px; }
+  .tms-pr .tms-pr-btn{ font-size:15.5px; letter-spacing:.05em; padding:0 12px; }
+  .tms-pr .tms-pr-math{ padding:32px 20px 28px; }
+  .tms-pr .tms-pr-math-t{ font-size:27px; }
+  .tms-pr .tms-pr-row--all dd{ font-size:58px; }
+  .tms-pr .tms-pr-fine > span + span::before{ margin:0 10px 0 12px; }
+}
+
+/* side by side: the rows of the cards line up (name, price, text, list, button) */
+@supports (grid-template-rows: subgrid){
+  @media (min-width: 901px){
+    .tms-pr .tms-pr-plans{ row-gap:0; }
+    .tms-pr .tms-pr-plan{ display:grid; grid-row:span 5; grid-template-rows:subgrid; row-gap:0; }
+    .tms-pr .tms-pr-btn{ margin-top:0; align-self:end; }
+  }
+}
+
+/* ---------- one-time arrival, beat by beat (head, monthly row, one-time row, math, fine print), in page order ---------- */
+.tms-pr.tms-pr--armed .tms-pr-r{ opacity:0; transform:translateY(18px); }
+.tms-pr.tms-pr--armed .tms-pr-plan::before, .tms-pr.tms-pr--armed .tms-pr-math::before{ transform:scaleX(0); }
+.tms-pr.tms-pr--armed .tms-pr-medal{ opacity:0; transform:scale(.6); }
+.tms-pr.tms-pr--armed .tms-pr-in .tms-pr-r, .tms-pr.tms-pr--armed .tms-pr-r.tms-pr-in{
+  opacity:1; transform:none; transition:opacity .7s ease, transform .9s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--i, 0) * 100ms);
+}
+.tms-pr.tms-pr--armed .tms-pr-in .tms-pr-plan::before, .tms-pr.tms-pr--armed .tms-pr-math.tms-pr-in::before{ animation:tmsPrDraw 1s cubic-bezier(.6,0,.2,1) both; animation-delay:calc(.25s + var(--i, 0) * 100ms); }
+.tms-pr.tms-pr--armed .tms-pr-in .tms-pr-medal{ animation:tmsPrMedal .6s cubic-bezier(.3,1.5,.5,1) .75s both; }
+@keyframes tmsPrDraw{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+@keyframes tmsPrMedal{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:scale(1); } }
+
+@media (prefers-reduced-motion: reduce){
+  .tms-pr .tms-pr-btn, .tms-pr .tms-pr-btn svg, .tms-pr .tms-pr-plan{ transition:none; }
+  .tms-pr .tms-pr-btn:hover svg, .tms-pr .tms-pr-btn:focus-visible svg{ transform:none; }
+}
+</style>
+      <div class="tms-pr-wrap">
+        <header class="tms-pr-head tms-pr-beat">
+          <p class="tms-pr-cap tms-pr-r"><i aria-hidden="true"></i>Sua luta, inteira<i aria-hidden="true"></i></p>
+          <h2 id="tms-pr-title" class="tms-pr-h dfc-fit tms-pr-r" style="--i:1"><span class="l1">Liberar minha luta</span> <span class="l2">Fotos e vídeos</span></h2>
+          <p class="tms-pr-sub tms-pr-r" style="--i:2">Todas as fotos do fotógrafo do evento, a luta completa em vídeo e o highlight com os melhores momentos, na página da sua luta, para ver e baixar.</p>
+        </header>
+        <div class="tms-pr-plans tms-pr-plans--once dfc-pr-um tms-pr-beat">
+          <article class="tms-pr-plan tms-pr-plan--vip tms-pr-r" style="--i:0" aria-labelledby="tms-pr-n1">
+            <div class="tms-pr-top"><h3 id="tms-pr-n1" class="tms-pr-name">Luta completa</h3><span class="tms-pr-badge">Por luta</span></div>
+            <p class="tms-pr-price"><span class="tms-pr-now"><span class="tms-pr-cur">R$</span>140</span><span class="tms-pr-per">no Pix<b>/ pagamento único</b></span></p>
+            <p class="tms-pr-desc">Para o lutador, a família e a equipe guardarem a noite.</p>
+            <ul class="tms-pr-list">
+              <li>Todas as fotos da luta, em alta, para baixar</li>
+              <li>A luta inteira em vídeo, da entrada ao resultado</li>
+              <li>Highlight com os melhores momentos</li>
+              <li>Liberado aqui, na página da sua luta</li>
+            </ul>
+            <div data-dfc-pix></div>
+            <a class="tms-pr-btn tms-pr-btn--solid" href="#lutas" data-dfc-comprar>Quero minha luta<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></a>
+            <p class="dfc-pr-nota">Pagou? Manda o comprovante no WhatsApp e recebe o seu código de acesso.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+<!-- CHAMADA FINAL (S15 da TMS) -->
+<section class="tk tk-final" aria-label="Ache a sua luta">
+  <div class="tk-wrap">
+    <h2 class="tk-h tk-fit dfc-fit tk-rise" style="--fit-w:720px"><span>19 lutas numa noite.</span><span class="tk-acc">Ache a sua.</span></h2>
+    <p class="tk-final-cta tk-rise" style="--d:2"><a class="tk-btn tk-btn--solid" href="#lutas">Ver as lutas<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg></a></p>
+    <p class="tk-final-sign tk-rise" style="--d:3">Cordeirópolis-SP · 31.10.2026<span>DFC</span></p>
+  </div>
+</section>
+
+    <!-- A PÁGINA DA LUTA (abre por cima, com #luta-N no endereço) -->
+    <div class="dfc-luta" id="dfc-luta" role="dialog" aria-modal="true" aria-labelledby="dfc-luta-t" hidden>
+        <div class="dfc-luta-fundo" aria-hidden="true"></div>
+        <button type="button" class="dfc-fechar" aria-label="Fechar">&#10005;</button>
+        <div class="dfc-luta-rola">
+        <div class="dfc-luta-caixa">
+            <header class="dfc-luta-cab">
+                <p class="dfc-luta-cap"></p>
+                <h2 id="dfc-luta-t" class="dfc-luta-h"></h2>
+                <p class="dfc-luta-cint"></p>
+            </header>
+            <div class="dfc-slots" role="tablist" aria-label="O que tem nesta luta"></div>
+            <div class="dfc-painel"></div>
+        </div>
+        </div>
+    </div>
+    <div class="dfc-lb" id="dfc-lb" role="dialog" aria-modal="true" aria-label="Foto" hidden>
+        <img alt="">
+        <button type="button" class="dfc-lb-x" aria-label="Fechar">&#10005;</button>
+        <button type="button" class="dfc-lb-ant" aria-label="Foto anterior">&#8592;</button>
+        <button type="button" class="dfc-lb-prox" aria-label="Próxima foto">&#8594;</button>
+        <div class="dfc-lb-bar"><span class="dfc-lb-n"></span><a class="dfc-lb-baixar" href="#" rel="noopener">Baixar esta foto</a></div>
+    </div>
+
+    <script>
+    (function () {
+        const brand = document.getElementById('tms-brand');
+        if (!brand) return;
+        const RATIO = 491 / 2000, HEADER_H = 68, MINI = 32;
+        let W = 0, big = {}, small = {};
+        function layout() {
+            const vw = window.innerWidth;
+            W = Math.min(640, vw * 0.86);
+            brand.style.width = W + 'px';
+            const h = W * RATIO;
+            big = { x: (vw - W) / 2, y: 104, s: 1 };
+            const s = MINI / h;
+            small = { x: vw < 520 ? 12 : 22, y: (HEADER_H - MINI) / 2, s: s };
+            document.documentElement.style.setProperty('--tms-hero-pad', (104 + h + 36) + 'px');
+            update();
+        }
+        const ease = t => 1 - Math.pow(1 - t, 3);
+        function update() {
+            const p = ease(Math.min(1, Math.max(0, window.scrollY / 300)));
+            const x = big.x + (small.x - big.x) * p, y = big.y + (small.y - big.y) * p, sc = big.s + (small.s - big.s) * p;
+            brand.style.transform = `translate(${x}px, ${y}px) scale(${sc})`;
+            brand.querySelector('.nome').style.opacity = String(Math.max(0, 1 - p * 2.2));
+        }
+        window.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+        window.addEventListener('resize', layout);
+        window.addEventListener('load', layout);
+        layout();
+        requestAnimationFrame(() => document.body.classList.add('tms-ready'));
+    })();
+    </script>
+    <script>
+    document.querySelectorAll('.tms-lib-nav button').forEach(function (b) {
+        b.addEventListener('click', function () {
+            var row = document.getElementById(b.dataset.row);
+            row.scrollBy({ left: Number(b.dataset.dir) * row.clientWidth * 0.8, behavior: 'smooth' });
+        });
+    });
+    </script>
+    <script>
+/* Trench kit: one-time arrival for .tk sections that contain .tk-rise elements.
+   Fade up once when the section enters the viewport, then the classes come off and the section is plain again. */
+(function () {
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if (reduce || !('IntersectionObserver' in window)) return;
+  [].forEach.call(document.querySelectorAll('section.tk'), function (sec) {
+    if (!sec.querySelector('.tk-rise') || sec.getAttribute('data-tk')) return;
+    sec.setAttribute('data-tk', '1');
+    sec.classList.add('tk--armed');
+    var io = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (!entries[i].isIntersecting) continue;
+        io.disconnect();
+        sec.classList.add('tk--in');
+        setTimeout(function () { sec.classList.remove('tk--armed', 'tk--in'); }, 2200);
+        return;
+      }
+    }, { threshold: 0.12 });
+    io.observe(sec);
+  });
+})();
+
+/* Trench kit: equal-width heading lines (.tk-fit > span). Each line's --k is measured from the real text,
+   so every line fills the heading's width exactly (the hero / pricing look). CSS keeps a fallback --k. */
+(function () {
+  function fit() {
+    [].forEach.call(document.querySelectorAll('.tk-fit > span'), function (s) {
+      var d = s.style.display, f = s.style.fontSize;
+      s.style.display = 'inline-block'; s.style.fontSize = '100px';
+      var w = s.getBoundingClientRect().width;
+      s.style.display = d; s.style.fontSize = f;
+      if (w > 0) s.style.setProperty('--k', (w / 100).toFixed(4));
+    });
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener('load', fit);
+})();
+
+    </script>
+<script>
+/* chegada do bloco de preços (a mesma da TMS, sem os links de checkout) */
+(function () {
+  var sec = document.getElementById('precos');
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if (!sec || reduce || !('IntersectionObserver' in window)) return;
+  var beats = sec.querySelectorAll('.tms-pr-beat'), left = beats.length;
+  sec.classList.add('tms-pr--armed');
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      e.target.classList.add('tms-pr-in');
+      if (--left === 0) { io.disconnect(); setTimeout(function () { sec.classList.remove('tms-pr--armed'); }, 2200); }
+    });
+  }, { threshold: 0.15 });
+  [].forEach.call(beats, function (b) { io.observe(b); });
+})();
+</script>
+<script type="module">
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+
+/* =====================================================================
+   DFC · hero com par de luvas 3D (three.js r160, geometria procedural)
+   - a luva é um campo de distância (SDF) virado malha por surface nets
+   - couro: MeshPhysicalMaterial + clearcoat + grão procedural no shader
+   - giro igual ao do livro da Social Hack:
+     translateY(scrollY*-0.25px) rotateX(8 - my*10 deg) rotateY(-28 + mx*22 + scrollY*0.04 deg)
+   ===================================================================== */
+
+/* ---------------- SDF helpers ---------------- */
+const { sqrt, abs, max, min, atan2, PI } = Math;
+const smin = (a, b, k) => { const h = max(k - abs(a - b), 0) / k; return min(a, b) - h * h * k * 0.25; };
+const smax = (a, b, k) => -smin(-a, -b, k);
+const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+const sstep = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+function ell(px, py, pz, rx, ry, rz) {
+  const ax = px / rx, ay = py / ry, az = pz / rz;
+  const k0 = sqrt(ax * ax + ay * ay + az * az);
+  const bx = ax / rx, by = ay / ry, bz = az / rz;
+  const k1 = sqrt(bx * bx + by * by + bz * bz) + 1e-9;
+  return (k0 * (k0 - 1)) / k1;
+}
+function ell2(px, pz, rx, rz) {
+  const ax = px / rx, az = pz / rz;
+  const k0 = sqrt(ax * ax + az * az);
+  const bx = ax / rx, bz = az / rz;
+  const k1 = sqrt(bx * bx + bz * bz) + 1e-9;
+  return (k0 * (k0 - 1)) / k1;
+}
+function rbox2(px, py, hx, hy, r) {
+  const qx = abs(px) - hx + r, qy = abs(py) - hy + r;
+  const ox = max(qx, 0), oy = max(qy, 0);
+  return min(max(qx, qy), 0) + sqrt(ox * ox + oy * oy) - r;
+}
+function rbox3(px, py, pz, hx, hy, hz, r) {
+  const qx = abs(px) - hx + r, qy = abs(py) - hy + r, qz = abs(pz) - hz + r;
+  const ox = max(qx, 0), oy = max(qy, 0), oz = max(qz, 0);
+  return min(max(qx, max(qy, qz)), 0) + sqrt(ox * ox + oy * oy + oz * oz) - r;
+}
+function makeRoundCone(a, b, r1, r2) {
+  const bax = b[0] - a[0], bay = b[1] - a[1], baz = b[2] - a[2];
+  const l2 = bax * bax + bay * bay + baz * baz, rr = r1 - r2, a2 = l2 - rr * rr, il2 = 1 / l2, srr = Math.sign(rr);
+  return (px, py, pz) => {
+    const pax = px - a[0], pay = py - a[1], paz = pz - a[2];
+    const y = pax * bax + pay * bay + paz * baz, z = y - l2;
+    const qx = pax * l2 - bax * y, qy = pay * l2 - bay * y, qz = paz * l2 - baz * y;
+    const x2 = qx * qx + qy * qy + qz * qz, y2 = y * y * l2, z2 = z * z * l2;
+    const k = srr * rr * rr * x2;
+    if (Math.sign(z) * a2 * z2 > k) return sqrt(x2 + z2) * il2 - r2;
+    if (Math.sign(y) * a2 * y2 < k) return sqrt(x2 + y2) * il2 - r1;
+    return (sqrt(x2 * a2 * il2) + y * rr) * il2 - r1;
+  };
+}
+
+/* ---------------- a luva (mão direita: polegar em -X, dorso em +Z, cima = +Y) ---------------- */
+const G = {
+  cuffY0: -0.68, cuffY1: -0.05, cuffRX: 0.265, cuffRZ: 0.29,
+  strapYC: -0.36, strapH: 0.19, strapT: 0.032,
+};
+function superEll(px, py, pz, a, b, c, n) {
+  const f = Math.pow(Math.pow(abs(px) / a, n) + Math.pow(abs(py) / b, n) + Math.pow(abs(pz) / c, n), 1 / n);
+  return (f - 1) * min(a, b, c);
+}
+// polegar: tubo liso por uma curva Catmull-Rom (vários cones arredondados em sequência)
+function makeTube(pts, n) {
+  const P = [], segs = [];
+  const cr = (p0, p1, p2, p3, t) => {
+    const t2 = t * t, t3 = t2 * t;
+    return p1.map((_, i) => 0.5 * (2 * p1[i] + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3));
+  };
+  const ext = [pts[0].map((v, i) => 2 * v - pts[1][i]), ...pts, pts[pts.length - 1].map((v, i) => 2 * v - pts[pts.length - 2][i])];
+  for (let s = 0; s < pts.length - 1; s++) for (let k = 0; k < n; k++) P.push(cr(ext[s], ext[s + 1], ext[s + 2], ext[s + 3], k / n));
+  P.push(pts[pts.length - 1].slice());
+  for (let i = 0; i < P.length - 1; i++) segs.push(makeRoundCone(P[i], P[i + 1], P[i][3], P[i + 1][3]));
+  let cx = 0, cy = 0, cz = 0; P.forEach((p) => { cx += p[0]; cy += p[1]; cz += p[2]; }); cx /= P.length; cy /= P.length; cz /= P.length;
+  let R = 0; P.forEach((p) => { R = max(R, Math.hypot(p[0] - cx, p[1] - cy, p[2] - cz) + p[3]); });
+  return (x, y, z) => {
+    const b = sqrt((x - cx) ** 2 + (y - cy) ** 2 + (z - cz) ** 2) - R;
+    if (b > 0.12) return b;
+    let d = 1e9; for (let i = 0; i < segs.length; i++) d = min(d, segs[i](x, y, z));
+    return d;
+  };
+}
+// [x, y, z, raio]
+const thumb = makeTube([[-0.215, 0.02, -0.12, 0.112], [-0.305, 0.19, -0.17, 0.134], [-0.33, 0.37, -0.19, 0.13], [-0.30, 0.53, -0.175, 0.104]], 5);
+const flare = (y) => 0.018 * sstep(-0.40, -0.68, y);
+
+function cuffEll(x, y, z) { const f = flare(y); return ell2(x, z, G.cuffRX + f, G.cuffRZ + f); }
+
+function gloveSDF(x, y, z) {
+  // dorso + topo (onde ficam os nós dos dedos): superelipsoide, topo largo e cheio
+  let d = superEll(x, y - 0.465, z - 0.02, 0.355, 0.465, 0.36, 2.4);
+  // dedos fechados: o volume que avança para a frente (lado da palma)
+  d = smin(d, ell(x, y - 0.50, z + 0.20, 0.335, 0.34, 0.34), 0.08);
+  // palma / pulso: emenda macia no dorso, vinco marcado embaixo dos dedos
+  const kw = 0.05 + 0.11 * sstep(-0.25, 0.1, z);
+  d = smin(d, ell(x, y - 0.06, z + 0.04, 0.30, 0.30, 0.325), kw);
+  // punho (cuff) com leve abertura embaixo
+  const yc = (G.cuffY0 + G.cuffY1) / 2, hh = (G.cuffY1 - G.cuffY0) / 2, rr = 0.05;
+  const qx = cuffEll(x, y, z) + rr, qy = abs(y - yc) - hh + rr;
+  const cuff = min(max(qx, qy), 0) + sqrt(max(qx, 0) ** 2 + max(qy, 0) ** 2) - rr;
+  d = smin(d, cuff, 0.12);
+  // boca do punho (oca)
+  const hole = max(ell2(x, z, 0.205, 0.228), y - (G.cuffY0 + 0.26));
+  d = smax(d, -hole, 0.035);
+  // polegar colado ao lado
+  d = smin(d, thumb(x, y, z), 0.045);
+  return d;
+}
+
+// faixa de velcro: uma volta inteira + a ponta que passa por cima e termina numa borda
+const STRAP_TS = 0.55, STRAP_TE = 0.55 + 3.35; // ângulos (rad) do início da sobreposição e da ponta solta
+function strapSDF(x, y, z) {
+  const e = cuffEll(x, y, z);
+  const yy = y - G.strapYC, t = G.strapT, h = G.strapH;
+  let d = rbox2(e - (t - 0.012) / 2, yy, (t + 0.012) / 2, h, 0.013);
+  let th = atan2(z, x); while (th < STRAP_TS) th += 2 * PI; // th em [TS, TS+2pi)
+  const R = 0.30;
+  const a = 0.5 * t * sstep(STRAP_TS, STRAP_TS + 0.9, th) + 1e-4;
+  const sLen = (STRAP_TE - STRAP_TS) * R, s = (th - STRAP_TE) * R + sLen / 2;
+  const flap = rbox3(e - (t + a), yy, s, a, h - 0.004, sLen / 2, min(0.012, a));
+  return min(d, flap);
+}
+const allSDF = (x, y, z) => min(gloveSDF(x, y, z), strapSDF(x, y, z));
+
+/* ---------------- SDF -> malha (naive surface nets) ---------------- */
+// devolve o controle ao navegador a cada ~10 ms para não travar a página enquanto a malha é montada
+const yieldNow = () => new Promise((r) => { const ch = new MessageChannel(); ch.port1.onmessage = () => r(); ch.port2.postMessage(0); });
+let sliceT = 0;
+const breathe = async () => { if (performance.now() - sliceT > 10) { await yieldNow(); sliceT = performance.now(); } };
+async function surfaceNets(sdf, bmin, bmax, h, aoSdf) {
+  const nx = Math.ceil((bmax[0] - bmin[0]) / h) + 1, ny = Math.ceil((bmax[1] - bmin[1]) / h) + 1, nz = Math.ceil((bmax[2] - bmin[2]) / h) + 1;
+  const sxy = nx * ny, F = new Float32Array(nx * ny * nz), exact = new Uint8Array(nx * ny * nz);
+  const B = 4, rad = Math.sqrt(3) * B * h * 0.5 * 1.6 + 0.02;
+  for (let bk = 0; bk < nz - 1; bk += B) for (let bj = 0; bj < ny - 1; bj += B) { await breathe(); for (let bi = 0; bi < nx - 1; bi += B) {
+    const i1 = min(bi + B, nx - 1), j1 = min(bj + B, ny - 1), k1 = min(bk + B, nz - 1);
+    const dc = sdf(bmin[0] + (bi + i1) * 0.5 * h, bmin[1] + (bj + j1) * 0.5 * h, bmin[2] + (bk + k1) * 0.5 * h);
+    const near = abs(dc) < rad;
+    for (let k = bk; k <= k1; k++) for (let j = bj; j <= j1; j++) for (let i = bi; i <= i1; i++) {
+      const id = i + j * nx + k * sxy;
+      if (near) { if (!exact[id]) { F[id] = sdf(bmin[0] + i * h, bmin[1] + j * h, bmin[2] + k * h); exact[id] = 1; } }
+      else if (!exact[id]) F[id] = dc;
+    }
+  } }
+  const cnx = nx - 1, cny = ny - 1, cnz = nz - 1;
+  const vid = new Int32Array(cnx * cny * cnz).fill(-1);
+  const P = [];
+  const co = [[0,0,0],[1,0,0],[0,1,0],[1,1,0],[0,0,1],[1,0,1],[0,1,1],[1,1,1]];
+  const ed = [[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]];
+  const v = new Float32Array(8);
+  for (let k = 0; k < cnz; k++) { await breathe(); for (let j = 0; j < cny; j++) for (let i = 0; i < cnx; i++) {
+    let mask = 0;
+    for (let c = 0; c < 8; c++) { const val = F[(i + co[c][0]) + (j + co[c][1]) * nx + (k + co[c][2]) * sxy]; v[c] = val; if (val < 0) mask |= 1 << c; }
+    if (mask === 0 || mask === 255) continue;
+    let sx = 0, sy = 0, sz = 0, n = 0;
+    for (let e = 0; e < 12; e++) {
+      const a = ed[e][0], b = ed[e][1];
+      if ((v[a] < 0) === (v[b] < 0)) continue;
+      const t = v[a] / (v[a] - v[b]);
+      sx += co[a][0] + (co[b][0] - co[a][0]) * t; sy += co[a][1] + (co[b][1] - co[a][1]) * t; sz += co[a][2] + (co[b][2] - co[a][2]) * t; n++;
+    }
+    vid[i + j * cnx + k * cnx * cny] = P.length / 3;
+    P.push(bmin[0] + (i + sx / n) * h, bmin[1] + (j + sy / n) * h, bmin[2] + (k + sz / n) * h);
+  } }
+  // projeta no zero do campo, normal = gradiente, oclusão de ambiente pelo próprio campo
+  const nv = P.length / 3, pos = new Float32Array(P), nor = new Float32Array(nv * 3), ao = new Float32Array(nv);
+  const e = h * 0.35;
+  const grad = (x, y, z, out) => {
+    const a = sdf(x + e, y - e, z - e), b = sdf(x - e, y - e, z + e), c = sdf(x - e, y + e, z - e), d = sdf(x + e, y + e, z + e);
+    out[0] = a - b - c + d; out[1] = -a - b + c + d; out[2] = -a + b - c + d;
+  };
+  const g = [0, 0, 0];
+  for (let i = 0; i < nv; i++) {
+    if ((i & 255) === 0) await breathe();
+    let x = pos[i * 3], y = pos[i * 3 + 1], z = pos[i * 3 + 2];
+    for (let it = 0; it < 3; it++) {
+      const d = sdf(x, y, z); grad(x, y, z, g);
+      const gl = g[0] * g[0] + g[1] * g[1] + g[2] * g[2]; if (gl < 1e-12) break;
+      const L = sqrt(gl); x -= d * g[0] / L; y -= d * g[1] / L; z -= d * g[2] / L;
+      if (abs(d) < 1e-5) break;
+    }
+    grad(x, y, z, g); const L = sqrt(g[0] * g[0] + g[1] * g[1] + g[2] * g[2]) || 1;
+    const nx_ = g[0] / L, ny_ = g[1] / L, nz_ = g[2] / L;
+    pos[i * 3] = x; pos[i * 3 + 1] = y; pos[i * 3 + 2] = z;
+    nor[i * 3] = nx_; nor[i * 3 + 1] = ny_; nor[i * 3 + 2] = nz_;
+    let occ = 0, wsum = 0, w = 1;
+    for (let s = 1; s <= 5; s++) {
+      const hh = 0.012 + 0.032 * s;
+      const dd = aoSdf(x + nx_ * hh, y + ny_ * hh, z + nz_ * hh);
+      occ += w * clamp01((hh - dd) / hh); wsum += w; w *= 0.75;
+    }
+    ao[i] = clamp01(1 - 1.25 * occ / wsum);
+  }
+  // faces
+  const idx = [];
+  const quad = (a, b, c, d, flip) => {
+    if (a < 0 || b < 0 || c < 0 || d < 0) return;
+    if (flip) { const t = b; b = d; d = t; }
+    const dx1 = pos[a*3]-pos[c*3], dy1 = pos[a*3+1]-pos[c*3+1], dz1 = pos[a*3+2]-pos[c*3+2];
+    const dx2 = pos[b*3]-pos[d*3], dy2 = pos[b*3+1]-pos[d*3+1], dz2 = pos[b*3+2]-pos[d*3+2];
+    if (dx1*dx1+dy1*dy1+dz1*dz1 <= dx2*dx2+dy2*dy2+dz2*dz2) idx.push(a, b, c, a, c, d); else idx.push(a, b, d, b, c, d);
+  };
+  const C = (i, j, k) => vid[i + j * cnx + k * cnx * cny];
+  for (let k = 1; k < cnz; k++) { if ((k & 7) === 0) await breathe(); for (let j = 1; j < cny; j++) for (let i = 0; i < cnx; i++) { // arestas em x
+    const a = F[i + j * nx + k * sxy], b = F[i + 1 + j * nx + k * sxy];
+    if ((a < 0) === (b < 0)) continue;
+    quad(C(i, j - 1, k - 1), C(i, j, k - 1), C(i, j, k), C(i, j - 1, k), a >= 0);
+  } }
+  for (let k = 1; k < cnz; k++) { if ((k & 7) === 0) await breathe(); for (let j = 0; j < cny; j++) for (let i = 1; i < cnx; i++) { // arestas em y
+    const a = F[i + j * nx + k * sxy], b = F[i + (j + 1) * nx + k * sxy];
+    if ((a < 0) === (b < 0)) continue;
+    quad(C(i - 1, j, k - 1), C(i - 1, j, k), C(i, j, k), C(i, j, k - 1), a >= 0);
+  } }
+  for (let k = 0; k < cnz; k++) { if ((k & 7) === 0) await breathe(); for (let j = 1; j < cny; j++) for (let i = 1; i < cnx; i++) { // arestas em z
+    const a = F[i + j * nx + k * sxy], b = F[i + j * nx + (k + 1) * sxy];
+    if ((a < 0) === (b < 0)) continue;
+    quad(C(i - 1, j - 1, k), C(i, j - 1, k), C(i, j, k), C(i - 1, j, k), a >= 0);
+  } }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute("normal", new THREE.BufferAttribute(nor, 3));
+  geo.setAttribute("ao", new THREE.BufferAttribute(ao, 1));
+  geo.setIndex(nv > 65535 ? new THREE.Uint32BufferAttribute(idx, 1) : new THREE.Uint16BufferAttribute(idx, 1));
+  geo.computeBoundingSphere();
+  return geo;
+}
+
+/* ---------------- material de couro ---------------- */
+const GLSL_COMMON = /* glsl */`
+varying vec3 vObjPos;
+varying float vAO;
+uniform mat3 normalMatrix;
+uniform float uGrain;
+uniform float uLogoOn;
+uniform float uFlip;
+uniform float uKind;
+uniform float uLogoAng;
+uniform sampler2D uLogo;
+uniform vec3 uPrint;
+float hash13(vec3 p){ p = fract(p*0.3183099 + vec3(0.71,0.113,0.419)); p *= 17.0; return fract(p.x*p.y*p.z*(p.x+p.y+p.z)); }
+vec4 noised(vec3 x){
+  vec3 i = floor(x), w = fract(x);
+  vec3 u = w*w*w*(w*(w*6.0-15.0)+10.0), du = 30.0*w*w*(w*(w-2.0)+1.0);
+  float a = hash13(i), b = hash13(i+vec3(1,0,0)), c = hash13(i+vec3(0,1,0)), d = hash13(i+vec3(1,1,0));
+  float e = hash13(i+vec3(0,0,1)), f = hash13(i+vec3(1,0,1)), g = hash13(i+vec3(0,1,1)), h = hash13(i+vec3(1,1,1));
+  float k0=a, k1=b-a, k2=c-a, k3=e-a, k4=a-b-c+d, k5=a-c-e+g, k6=a-b-e+f, k7=-a+b+c-d+e-f-g+h;
+  return vec4(k0+k1*u.x+k2*u.y+k3*u.z+k4*u.x*u.y+k5*u.y*u.z+k6*u.z*u.x+k7*u.x*u.y*u.z,
+    du*vec3(k1+k4*u.y+k6*u.z+k7*u.y*u.z, k2+k5*u.z+k4*u.x+k7*u.z*u.x, k3+k6*u.x+k5*u.y+k7*u.x*u.y));
+}
+vec3 grainGrad(vec3 p, float fp){
+  // fp = tamanho do pixel em unidades do objeto: some com o grão quando ele ficaria menor que ~1.5 px
+  float f1 = 110.0, f2 = 240.0;
+  float w1 = clamp(1.0 - fp*f1*1.2, 0.0, 1.0), w2 = clamp(1.0 - fp*f2*1.2, 0.0, 1.0);
+  vec3 g = noised(p*f1).yzw * (f1*0.00034) * w1;
+  g += noised(p*f2 + 3.7).yzw * (f2*0.00016) * w2;
+  return g;
+}
+vec3 bumpN(vec3 n, vec3 gObj){ vec3 gv = normalMatrix * gObj; return normalize(n - (gv - dot(gv, n)*n)); }
+`;
+const GLSL_PERTURB = /* glsl */`
+{
+  vec3 p = vObjPos;
+  float fp = length(fwidth(p));
+  vec3 gb = grainGrad(p, fp) * uGrain;     // grão: só na camada de baixo, o verniz fica liso
+  vec3 gs = vec3(0.0);                     // costuras: marcam as duas camadas
+  float dark = 0.0;
+  if (uKind < 0.5) {
+    // vivos laterais (|x| = 0.215) e emenda do pulso (y = -0.05)
+    float w = max(0.0055, fp * 0.9), fade = 0.0055 / w;
+    float on = smoothstep(-0.07, 0.03, p.y);
+    float f = abs(p.x) - 0.215;
+    float e1 = exp(-f * f / (w * w));
+    float g2 = (abs(f) - 1.8 * w) / (0.7 * w), e2 = exp(-g2 * g2);
+    float dh = 0.0032 * fade * on * (-2.0 * f / (w * w) * e1 + 0.9 * 2.0 * g2 / (0.7 * w) * e2 * sign(f));
+    gs.x += sign(p.x) * dh;
+    dark += 0.45 * e2 * on * fade;
+    // forro escuro dentro da boca do punho
+    float lin = (1.0 - smoothstep(0.96, 1.04, length(p.xz / vec2(0.214, 0.238)))) * (1.0 - smoothstep(-0.44, -0.40, p.y));
+    diffuseColor.rgb *= 1.0 - 0.86 * lin;
+    roughnessFactor = mix(roughnessFactor, 0.8, lin);
+    float fy = p.y + 0.05;
+    float r1 = exp(-fy * fy / (w * w * 1.6));
+    gs.y += 0.0030 * fade * (-2.0 * fy / (w * w * 1.6)) * r1;
+    dark += 0.35 * r1 * fade * step(0.0, -fy + 2.0 * w);
+  } else {
+    // pesponto da faixa: duas linhas tracejadas perto das bordas
+    float th = atan(p.z, p.x);
+    float yy = abs(p.y - (${G.strapYC.toFixed(3)})) - (${(G.strapH - 0.024).toFixed(3)});
+    float w = max(0.0032, fp * 0.8), fade = 0.0032 / w;
+    float dash = smoothstep(0.15, 0.3, fract(th * 0.30 / 0.016)) * smoothstep(0.8, 0.65, fract(th * 0.30 / 0.016));
+    float line = exp(-yy * yy / (w * w)) * fade;
+    dark += 0.0; 
+    diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 1.55 + 0.04, line * dash * 0.85);
+    float gy = exp(-yy * yy / (w * w * 2.5));
+    gs.y += sign(p.y - (${G.strapYC.toFixed(3)})) * 0.0022 * fade * (2.0 * yy / (w * w * 2.5)) * gy * (1.0 - dash * 0.6);
+  }
+  normal = bumpN(normal, gb + gs);
+  clearcoatNormal = bumpN(clearcoatNormal, gs);
+  diffuseColor.rgb *= 1.0 - dark;
+  if (uLogoOn > 0.5) {
+    float th = atan(p.z, p.x);
+    vec2 luv = vec2(0.5 + uFlip * (mod(th - uLogoAng + 3.14159265, 6.2831853) - 3.14159265) * 0.30 / 0.36, (p.y - (${G.strapYC.toFixed(3)})) / 0.17 + 0.5);
+    float m = 0.0;
+    if (luv.x > 0.0 && luv.x < 1.0 && luv.y > 0.0 && luv.y < 1.0) m = texture2D(uLogo, luv).a;
+    diffuseColor.rgb = mix(diffuseColor.rgb, uPrint, m);
+    roughnessFactor = mix(roughnessFactor, 0.55, m);
+  }
+}
+`;
+const GLSL_AO = /* glsl */`
+{
+  float occ = vAO;
+  reflectedLight.indirectDiffuse *= occ;
+  reflectedLight.directDiffuse *= mix(1.0, occ, 0.55);
+  #if defined( USE_CLEARCOAT )
+    clearcoatSpecularIndirect *= occ*occ;
+    clearcoatSpecularDirect *= mix(1.0, occ, 0.5);
+  #endif
+  float dotNVao = saturate( dot( geometryNormal, geometryViewDir ) );
+  reflectedLight.indirectSpecular *= computeSpecularOcclusion( dotNVao, occ, material.roughness );
+}
+`;
+function leather(color, { grain = 1, logo = null, flip = 1, print = "#ffffff", rough = 0.42, ccRough = 0.12 } = {}) {
+  const m = new THREE.MeshPhysicalMaterial({ color, roughness: rough, metalness: 0, clearcoat: 1, clearcoatRoughness: ccRough, envMapIntensity: 1 });
+  m.userData.uniforms = {
+    uGrain: { value: grain }, uLogoAng: { value: PI / 2 }, uKind: { value: logo ? 1 : 0 }, uLogoOn: { value: logo ? 1 : 0 }, uLogo: { value: logo }, uFlip: { value: flip },
+    uPrint: { value: new THREE.Color(print) },
+  };
+  m.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, m.userData.uniforms);
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nattribute float ao;\nvarying vec3 vObjPos;\nvarying float vAO;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvObjPos = position;\nvAO = ao;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\n" + GLSL_COMMON)
+      .replace("#include <clearcoat_normal_fragment_maps>", "#include <clearcoat_normal_fragment_maps>\n" + GLSL_PERTURB)
+      .replace("#include <aomap_fragment>", GLSL_AO);
+  };
+  m.customProgramCacheKey = () => "dfc-leather";
+  return m;
+}
+
+/* ---------------- estúdio (reflexos do clearcoat) ---------------- */
+function studioEnvironment(renderer) {
+  const s = new THREE.Scene();
+  s.add(new THREE.Mesh(new THREE.SphereGeometry(30, 32, 16), new THREE.MeshBasicMaterial({ color: 0x060606, side: THREE.BackSide })));
+  const panel = (w, h, intensity, x, y, z, color = 0xffffff) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide }));
+    m.material.color.multiplyScalar(intensity); m.position.set(x, y, z); m.lookAt(0, 0, 0); s.add(m);
+  };
+  panel(7, 5, 7, -7, 6, 7);             // softbox principal (alto, à esquerda, na frente)
+  panel(1.4, 10, 9, 9, 1, -4);          // faixa de recorte à direita, atrás
+  panel(1.4, 10, 5, -9, 1, -6);         // faixa de recorte à esquerda, atrás
+  panel(10, 10, 1.6, 0, 12, 0);         // teto
+  panel(8, 2.5, 0.9, 2, -7, 6, 0xffd27a); // rebatedor quente embaixo
+  const pm = new THREE.PMREMGenerator(renderer);
+  const tex = pm.fromScene(s, 0.035).texture;
+  pm.dispose();
+  return tex;
+}
+
+/* ---------------- logo impresso na faixa ---------------- */
+function logoTexture(onUpdate) {
+  const c = document.createElement("canvas"); c.width = 512; c.height = 256;
+  const g = c.getContext("2d");
+  const draw = () => {
+    g.clearRect(0, 0, 512, 256);
+    g.fillStyle = "#fff"; g.textAlign = "center"; g.textBaseline = "alphabetic";
+    g.font = '400 210px Anton, Impact, "Arial Narrow", sans-serif';
+    g.fillText("DFC", 256, 232);
+  };
+  draw();
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; t.colorSpace = THREE.SRGBColorSpace;
+  // a Anton pode chegar depois do primeiro quadro: redesenha quando carregar
+  if (document.fonts && document.fonts.load) document.fonts.load('400 210px Anton').then(() => { draw(); t.needsUpdate = true; onUpdate(); }).catch(() => {});
+  return t;
+}
+
+/* ---------------- montagem ---------------- */
+async function init() {
+  const root = document.querySelector(".dfc-hero");
+  if (!root) return;
+  const stage = root.querySelector(".dfc-hero__stage");
+  const canvas = stage.querySelector("canvas");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const touchOnly = matchMedia("(hover: none), (pointer: coarse)").matches;
+
+  // entrada: posição do mouse/toque na janela, de -0,5 a 0,5 (igual ao livro)
+  let tx = 0, ty = 0, mx = 0, my = 0, lastInput = -1e9, needs = true;
+  const onPointer = (e) => { tx = e.clientX / innerWidth - 0.5; ty = e.clientY / innerHeight - 0.5; lastInput = performance.now(); needs = true; };
+  addEventListener("pointermove", onPointer, { passive: true });
+  addEventListener("pointerdown", onPointer, { passive: true });
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  } catch (err) { stage.style.display = "none"; return; }
+  renderer.setClearColor(0x000000, 0);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.92;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  const scene = new THREE.Scene();
+  scene.environment = studioEnvironment(renderer);
+
+  const camera = new THREE.PerspectiveCamera(24, 4 / 5, 0.1, 50);
+  camera.position.set(0, 1.4, 6.05);   // um pouco de cima, para quase não mostrar a boca dos punhos
+  camera.lookAt(0, 0.10, 0);
+
+  const key = new THREE.DirectionalLight(0xfff1e2, 2.2); key.position.set(-3, 4, 4.5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xffffff, 2.4); rim.position.set(4, 2, -3.5); scene.add(rim);
+  const kick = new THREE.DirectionalLight(0xF9C228, 0.9); kick.position.set(-4, -1.5, -2.5); scene.add(kick);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x0b0b0b, 0.25));
+
+  // geometria (uma luva direita; a esquerda é o espelho)
+  // malha mais leve quando o palco é pequeno (celular)
+  const CELL = stage.getBoundingClientRect().width < 480 ? 0.0135 : 0.0105;
+  const bodyGeo = await surfaceNets(gloveSDF, [-0.52, -0.74, -0.62], [0.42, 1.02, 0.44], CELL, allSDF);
+  const strapGeo = await surfaceNets(strapSDF, [-0.36, -0.60, -0.38], [0.36, -0.12, 0.38], CELL * 0.8, allSDF);
+
+  const logo = logoTexture(() => { needs = true; });
+  const RED = "#c3141f", BLUE = "#1747b8";
+  const matRed = leather(RED), matBlue = leather(BLUE);
+  const strapRed = leather(RED, { logo, flip: 1, rough: 0.48, ccRough: 0.16 });
+  const strapBlue = leather(BLUE, { logo, flip: -1, rough: 0.48, ccRough: 0.16 });
+
+  const makeGlove = (mat, strapMat, mirror) => {
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(bodyGeo, mat), new THREE.Mesh(strapGeo, strapMat));
+    if (mirror) g.scale.x = -1;
+    return g;
+  };
+  const pivot = new THREE.Group(); scene.add(pivot);       // recebe o giro do mouse/rolagem
+  const pair = new THREE.Group(); pivot.add(pair);
+  const red = makeGlove(matRed, strapRed, true);           // luva esquerda, vermelha
+  const blue = makeGlove(matBlue, strapBlue, false);        // luva direita, azul
+  const holdR = new THREE.Group(), holdB = new THREE.Group();
+  holdR.add(red); holdB.add(blue); pair.add(holdR, holdB);
+  holdR.rotation.order = holdB.rotation.order = "ZYX";       // gira no próprio eixo, depois inclina
+  // as duas em diagonal, uma à frente da outra: os punhos caem no vão da linha 2 e os cuffs no vão da linha 3
+  holdR.position.set(-0.25, -0.12, 0.18); holdR.rotation.set(0, -2.3, 0.55);
+  holdB.position.set(0.22, 0.12, -0.18); holdB.rotation.set(0, -2.6, 0.62);
+
+  // sombra suave embaixo (não inclina com o rotateX, só acompanha o giro em Y)
+  const shTex = (() => {
+    const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
+    const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+    gr.addColorStop(0, "rgba(0,0,0,0.7)"); gr.addColorStop(0.45, "rgba(0,0,0,0.35)"); gr.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = gr; g.fillRect(0, 0, 256, 256); return new THREE.CanvasTexture(c);
+  })();
+  const shadowSpin = new THREE.Group(); scene.add(shadowSpin);
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 1.3), new THREE.MeshBasicMaterial({ map: shTex, transparent: true, depthWrite: false, toneMapped: false }));
+  shadow.rotation.x = -PI / 2; shadow.position.y = -0.80; shadow.renderOrder = -1; shadowSpin.add(shadow);
+
+  // gira o logo da faixa para o lado que olha a câmera na pose inicial
+  const aimLogo = (glove, mat) => {
+    pivot.rotation.set(-8 * PI / 180, -28 * PI / 180, 0, "XYZ");
+    scene.updateMatrixWorld(true);
+    const inv = glove.matrixWorld.clone().invert();
+    const c = camera.position.clone().applyMatrix4(inv), o = new THREE.Vector3(0, G.strapYC, 0);
+    const dir = c.sub(o);
+    mat.userData.uniforms.uLogoAng.value = Math.atan2(dir.z, dir.x);
+  };
+  aimLogo(red, strapRed); aimLogo(blue, strapBlue);
+
+  // tamanho
+  const resize = () => {
+    const r = stage.getBoundingClientRect();
+    const w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    needs = true;
+  };
+  new ResizeObserver(resize).observe(stage);
+  resize();
+
+  // compila os shaders sem travar a página (quando o navegador suporta)
+  pivot.rotation.set(-8 * PI / 180, -28 * PI / 180, 0, "XYZ");
+  try { await renderer.compileAsync(scene, camera); } catch (e) {}
+
+  let visible = true;
+  let raf = 0;
+  const loop = () => { if (!raf && !reduce && visible) raf = requestAnimationFrame(frame); };
+  new IntersectionObserver((es) => { visible = es[0].isIntersecting; loop(); }).observe(root);
+
+  const DEG = PI / 180;
+  let last = performance.now(), lastPose = "", shown = false;
+  function frame(now = performance.now()) {
+    raf = 0;
+    const dt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now;
+    const s = reduce ? 0 : window.scrollY;
+    let ax = tx, ay = ty;
+    if (!reduce && touchOnly && now - lastInput > 2600) {      // celular sem toque: gira devagar sozinho
+      const t = now / 1000;
+      ax = 0.85 * Math.sin(t * 0.55); ay = 0.18 * Math.sin(t * 0.37 + 1.3);
+    }
+    const k = reduce ? 1 : 1 - Math.exp(-dt * (touchOnly ? 3.2 : 9));
+    mx += (ax - mx) * k; my += (ay - my) * k;
+    let rx = 8 - my * 10, ry = -28 + mx * 22 + s * 0.04;
+    const pose = rx.toFixed(3) + "|" + ry.toFixed(3) + "|" + s;
+    if (needs || pose !== lastPose) {
+      canvas.style.transform = `translateY(${s * -0.25}px)`;
+      pivot.rotation.set(-rx * DEG, ry * DEG, 0, "XYZ");
+      shadowSpin.rotation.y = ry * DEG;
+      renderer.render(scene, camera);
+      lastPose = pose; needs = false;
+      if (!shown) { shown = true; stage.classList.add("is-on"); }
+    }
+    loop();
+  }
+  if (reduce) { frame(); new ResizeObserver(() => { needs = true; frame(); }).observe(stage); }
+  else loop();
+
+  root.dataset.ready = "1";
+}
+init();
+</script>
+    <script src="dados/lutas.js?v=4b3ed13b"></script>
+    <script src="dfc.js?v=393578c9"></script>
+</body>
+</html>
