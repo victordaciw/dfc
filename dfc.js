@@ -111,7 +111,7 @@
     }).join('');
     caixa.hidden = false;
     document.documentElement.classList.add('dfc-trava');
-    rola.scrollTop = 0;
+    rola.scrollTop = 0; caixa.scrollLeft = 0;
     var cod = !l.liberada && l.cofre && guardado(l.n);
     if (cod) {          // código já digitado neste navegador: abre sozinho
       painel.innerHTML = '<div class="dfc-aviso"><p>Abrindo a sua luta…</p></div>';
@@ -137,6 +137,7 @@
 
   function mostrar(k) {
     var l = atual;
+    caixa.scrollLeft = 0;
     [].forEach.call(slots.children, function (b) { b.setAttribute('aria-selected', String(b.getAttribute('data-k') === k)); });
     if (!l.liberada) { painel.innerHTML = trancada(l); return; }
     if (k === 'fotos') return galeria(l);
